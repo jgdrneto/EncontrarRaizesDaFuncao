@@ -8,7 +8,7 @@
 #define TOL 100
 
 //Constante para o máximo de erro que se deseja ter
-#define ERRO 0.001
+#define ERRO 0.00001
 
 //Classe static para uso dos algoritmos
 class Algoritmo{
@@ -250,7 +250,7 @@ class Algoritmo{
 			}
 
 			do{
-				//Salvando o x anterior para cálculo do erro
+				//Salvando o x anterior
 				xAnt = x;
 				//Formula	
 				x = xAnt - (polinomio.getResultado(x)/(polinomio.getResultado(x)-polinomio.getResultado(c)))*(x-c);

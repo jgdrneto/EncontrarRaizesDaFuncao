@@ -73,17 +73,20 @@ bool teste(int argc,char* argv[]){
 
 void preencherValores(Polinomio& polinomio){
 	//Adicionando valores estáticos a matriz
-	polinomio.getPolinomio()[0] = -3; 
+	polinomio.getPolinomio()[0] = -2; 
 	polinomio.getPolinomio()[1] = 0;
 	polinomio.getPolinomio()[2] = 1;
-	//polinomio.getPolinomio()[3] = -5;
+	//polinomio.getPolinomio()[3] = 1;
 	//polinomio.getPolinomio()[4] = 1;    
 	
 }
 
 //Método principal do programa
 int main(int argc, char*argv[]){
-	
+
+	//Aumentando precisão do cout	
+	std::cout.precision(15);
+
 	//Inicializando variáveis	
 	int n = -1;
 	
@@ -161,7 +164,7 @@ int main(int argc, char*argv[]){
 
 		//método da bisserção usando Lagrange
 
-		cout << "Usando Método de isolamento de bisserção usando Lagrange: " << endl;
+		cout << "Usando Método de bisserção usando Lagrange: " << endl;
 
 		cout << "Valor da aproximação é: " << Algoritmo::metodoDaBissercao(polinomio, intervalo) << endl;
 
@@ -175,7 +178,7 @@ int main(int argc, char*argv[]){
 
 		cout << "----------------------------------------------------" << endl;
 
-		cout << "Resultado: " << polinomio.getResultado(1.73188) << endl;
+		printf("Resultado: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoDasCordas(polinomio, intervalo)));
 
 	}
 }

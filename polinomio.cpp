@@ -9,7 +9,7 @@ using namespace std;
 class Polinomio{
 	private:
 		//Atributos da classe
-		double* p;	//Ponteiro de ponteiro que será alocado o espaço do polinômio
+		long double* p;	//Ponteiro de ponteiro que será alocado o espaço do polinômio
 		int grau;	//Grau do polinômio;
 
 	public:
@@ -23,7 +23,7 @@ class Polinomio{
 		grau(g){
 
 			//Alocando espaço para o polinômio
-			this->p = new double[g+1];
+			this->p = new long double[g+1];
 
 			//Iniciando com 0 em todo o polinômio
 			for(int i;i<=g;i++){
@@ -42,7 +42,7 @@ class Polinomio{
 		* Descrição: Retorna o ponteiro do polinômio
 		* @return : Ponteiro do atributo m da classe
 		*/
-		double*& getPolinomio(){
+		long double*& getPolinomio(){
 			return this->p;
 		}
 
@@ -63,7 +63,7 @@ class Polinomio{
 			long double soma=0;
 			//Somatório da aplicação do x em cada termo do polinômio
 			for(int i=0;i<=this->grau;i++){
-				soma+= this->p[i]*pow(x,i); 
+				soma+= this->p[i] * (long double)pow(x,i); 
 			}
 
 			return soma;
