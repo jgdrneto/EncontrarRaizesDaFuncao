@@ -59,8 +59,8 @@ class Polinomio{
 		* @params Double : Valor que se deseja aplicar ao polinômio
 		* @return Double : Resultado do polinômio aplicado ao x informado
 		*/
-		double getResultado(double x){
-			double soma=0;
+		long double getResultado(long double x){
+			long double soma=0;
 			//Somatório da aplicação do x em cada termo do polinômio
 			for(int i=0;i<=this->grau;i++){
 				soma+= this->p[i]*pow(x,i); 
@@ -97,7 +97,7 @@ class Polinomio{
 		*/
 		void adicionarValores(){
 
-			double valor=0;
+			long double valor=0;
 
 			for(int i = grau;i >= 0 ; i--){
 					
@@ -131,7 +131,7 @@ class Polinomio{
 		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
 		* @return double : Valor do coeficiente
 		*/
-		double maiorIndiceNegativo(){
+		long double maiorIndiceNegativo(){
 			//Percorre o polinômio de maneira decrecente
 			for(int i=this->grau;i>=0;i--){
 				//Verifica se o x^i polinômio tem valor negativo
@@ -148,9 +148,9 @@ class Polinomio{
 		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
 		* @return double : Valor do coeficiente
 		*/
-		double maiorValorAbsoluto(){
+		long double maiorValorAbsoluto(){
 			//Valor inicial de procura do maior valor absoluto
-			double menor = this->p[0];
+			long double menor = this->p[0];
 
 			//Percorre todo o polinômio
 			for(int i=0;i<=this->grau;i++){

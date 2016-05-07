@@ -135,9 +135,17 @@ int main(int argc, char*argv[]){
 
 		//Método da bisserção usando troca de sinal
 
-		cout << "Usando Método de isolamento de bisserção usando Troca de sinal: " << endl;
+		cout << "Usando Método de bisserção usando Troca de sinal: " << endl;
 
 		cout << "Valor da aproximação é: " << Algoritmo::metodoDaBissercao(polinomio, intervalo) << endl;
+
+		cout << "----------------------------------------------------" << endl;
+
+		//método das cordas
+
+		cout << "Usando Método das cordas usando troca de sinal: " << endl;
+
+		cout << "Valor da aproximação é: " << Algoritmo::metodoDasCordas(polinomio, intervalo) << endl;
 
 		cout << "----------------------------------------------------" << endl;
 
@@ -161,13 +169,13 @@ int main(int argc, char*argv[]){
 
 		//método das cordas
 
-		intervalo = *(new Intervalo(1,3)); 
-
 		cout << "Usando Método das cordas usando Lagrange: " << endl;
 
 		cout << "Valor da aproximação é: " << Algoritmo::metodoDasCordas(polinomio, intervalo) << endl;
 
 		cout << "----------------------------------------------------" << endl;
+
+		cout << "Resultado: " << polinomio.getResultado(1.73188) << endl;
 
 	}
 }

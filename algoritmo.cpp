@@ -8,7 +8,7 @@
 #define TOL 100
 
 //Constante para o máximo de erro que se deseja ter
-#define ERRO 0.01
+#define ERRO 0.001
 
 //Classe static para uso dos algoritmos
 class Algoritmo{
@@ -21,11 +21,12 @@ class Algoritmo{
 		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
 		* @return double : Valor do coeficiente
 		*/
-		static double calcularCoeficiente(Polinomio& polinomio){
+		static long double calcularCoeficiente(Polinomio& polinomio){
 			// Formula para calcular o coeficiente, 
 			// Pense em: (1 + pow(b,1/e))
 			// b : Valor de dentro da raiz
 			// e : indice da raiz
+			
 			/*
 			cout << "polinomio: " << endl;
 			polinomio.imprimir();
@@ -34,6 +35,7 @@ class Algoritmo{
 			cout << "Grau do polinomio: " << polinomio.getGrau() << endl;
 			cout << "Maior indice dos coeficientes negativos: " << polinomio.maiorIndiceNegativo() << endl;
 			*/
+			
 			return 1+pow((polinomio.maiorValorAbsoluto()/polinomio.getPolinomio()[polinomio.getGrau()]),(1 / (polinomio.getGrau()-polinomio.maiorIndiceNegativo())));
 		}
 
@@ -42,7 +44,7 @@ class Algoritmo{
 		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
 		* @return double : Valor inicial da cota superior de Lagrange
 		*/
-		static double cotaSupIniLagrange(Polinomio& polinomio){
+		static long double cotaSupIniLagrange(Polinomio& polinomio){
 				
 			//Criando um polinômio de mesmo grau.
 			Polinomio iniPolinomio = Polinomio(polinomio.getGrau());
@@ -69,7 +71,7 @@ class Algoritmo{
 		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
 		* @return double : Valor final da cota superior de Lagrange
 		*/
-		static double cotaSupFinDeLagrange(Polinomio& polinomio){
+		static long double cotaSupFinDeLagrange(Polinomio& polinomio){
 
 			return calcularCoeficiente(polinomio);
 		}
@@ -79,7 +81,7 @@ class Algoritmo{
 		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
 		* @return double : Valor inicial da cota inferior de Lagrange
 		*/
-		static double cotaInfIniLagrange(Polinomio& polinomio){
+		static long double cotaInfIniLagrange(Polinomio& polinomio){
 			
 			//Criando um polinômio de mesmo grau.
 			Polinomio infIniPolinomio = Polinomio(polinomio.getGrau());
@@ -115,7 +117,7 @@ class Algoritmo{
 		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
 		* @return double : Valor final da cota inferior de Lagrange
 		*/
-		static double cotaInfFinDeLagrange(Polinomio& polinomio){
+		static long double cotaInfFinDeLagrange(Polinomio& polinomio){
 			//Criando o polinômio que será usado nas contas inferiores
 			Polinomio infFinPolinomio =  Polinomio(polinomio.getGrau()); 
 			
@@ -194,14 +196,12 @@ class Algoritmo{
 		* @params Intervalo& : Intervalo em que se deseja procurar o zero da função
 		* @return double : zero da função.
 		*/		
-		static double metodoDaBissercao(Polinomio& polinomio,Intervalo& intervalo){
+		static long double metodoDaBissercao(Polinomio& polinomio,Intervalo& intervalo){
 			//Atribuindo valores do intervalo
-			double inferior = intervalo.getInicial();
-			double superior = intervalo.getFinal();
-			double pontoM; 
+			long double inferior = intervalo.getInicial();
+			long double superior = intervalo.getFinal();
+			long double pontoM; 
 
-			//Contador para tolerância
-			int i=0;	
 			//Repita até condição de parada	
 			do{
 				//Pega o ponto médio
@@ -219,8 +219,7 @@ class Algoritmo{
 					}
 				}
 
-				i++;
-			}while(abs(polinomio.getResultado(pontoM))>ERRO || i<=TOL);
+			}while(abs(polinomio.getResultado(pontoM))>ERRO);
 
 			//Retorna valor aproximado
 			return pontoM;
@@ -232,13 +231,11 @@ class Algoritmo{
 		* @params Intervalo& : Intervalo em que se deseja procurar o zero da função
 		* @return double : zero da função.
 		*/		
-		static double metodoDasCordas(Polinomio& polinomio,Intervalo& intervalo){
-			double inferior = intervalo.getInicial();
-			double superior = intervalo.getFinal();
+		static long double metodoDasCordas(Polinomio& polinomio,Intervalo& intervalo){
+			long double inferior = intervalo.getInicial();
+			long double superior = intervalo.getFinal();
 			//Valores que guadarão os valores atuais e o valores anteriores 
-			double x,c, xAnt;
-			//Variável que guardará a quantidade de interações até achar o resultado
-			int i=0;
+			long double x,c, xAnt;
 
 			//Calculando segunda derivada
 			Polinomio segundaDerivada = polinomio.getDerivada().getDerivada();
@@ -256,15 +253,13 @@ class Algoritmo{
 				//Salvando o x anterior para cálculo do erro
 				xAnt = x;
 				//Formula	
-				x = (polinomio.getResultado(x)/(polinomio.getResultado(x)-polinomio.getResultado(c)))*(x-c);
-
-				//Contador da tolerância
-				i++;
-			}while((abs(x-xAnt)/abs(x))<=ERRO || i<=TOL);
-
-			if(i==TOL){
-				cerr << "Limite da tolerância estrapolado" << endl;
-			}
+				x = xAnt - (polinomio.getResultado(x)/(polinomio.getResultado(x)-polinomio.getResultado(c)))*(x-c);
+				/*
+				cout << "Valor de x:" << x <<  endl;
+				cout << "Valor de x anterior:" << xAnt << endl;
+				cout << "-----------------------------------------------------" << endl;
+				*/
+			}while(abs(polinomio.getResultado(x))>ERRO);
 
 			return x;
 
@@ -276,7 +271,7 @@ class Algoritmo{
 		* @params Intervalo& : Intervalo em que se deseja procurar o zero da função
 		* @return double : zero da função.
 		*/		
-		static double metodoDoPontoFixo(Polinomio& polinomio,Intervalo& intervalo){
+		static long double metodoDoPontoFixo(Polinomio& polinomio,Intervalo& intervalo){
 			return 0;
 		}
 
@@ -286,7 +281,7 @@ class Algoritmo{
 		* @params Intervalo& : Intervalo em que se deseja procurar o zero da função
 		* @return double : zero da função.
 		*/		
-		static double metodoDeNewton(Polinomio& polinomio,Intervalo& intervalo){
+		static long double metodoDeNewton(Polinomio& polinomio,Intervalo& intervalo){
 			return 0;
 		}
 

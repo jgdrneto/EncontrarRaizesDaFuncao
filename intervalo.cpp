@@ -1,8 +1,8 @@
 //Classe de intervalo
 class Intervalo{
 	private:
-		double inicial;		// Inicío do intervalo
-		double final;		// Final do intervalo
+		long double inicial;		// Inicío do intervalo
+		long double final;		// Final do intervalo
 	public:	
 		
 		/**
@@ -18,7 +18,7 @@ class Intervalo{
 		* @params double : Valor inicial do intervalo
 		* @params double : Valor final do intervalo
 		*/
-		Intervalo(double nInicial, double nFinal):
+		Intervalo(long double nInicial,long double nFinal):
 		inicial(0),
 		final(0)
 		{
@@ -30,7 +30,7 @@ class Intervalo{
 		* Descrição: Retorna o valor de início do intervalo
 		* @return double : Valor de início do intervalo
 		*/
-		double getInicial(){
+		long double getInicial(){
 			return this->inicial;
 		}
 
@@ -38,7 +38,7 @@ class Intervalo{
 		* Descrição: Retorna o valor final do intervalo
 		* @return double : Valor final do intervalo
 		*/
-		double getFinal(){
+		long double getFinal(){
 			return this->final;
 		}
 
@@ -46,7 +46,7 @@ class Intervalo{
 		* Descrição: Insere um novo valor inicial no intervalo
 		* @return double : Novo Valor inicial do intervalo
 		*/
-		void setInicial(double nInicial){
+		void setInicial(long double nInicial){
 			this->inicial = nInicial;
 		}
 
@@ -54,7 +54,7 @@ class Intervalo{
 		* Descrição: Insere um novo valor final no intervalo
 		* @return double : Novo Valor final do intervalo
 		*/
-		void setFinal(double nFinal){
+		void setFinal(long double nFinal){
 			this->final = nFinal;
 		}
 		
