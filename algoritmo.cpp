@@ -1,5 +1,6 @@
 #include "polinomio.cpp"
 #include "intervalo.cpp"
+#include "matriz.cpp"
 
 //Constante usado no passo do método de troca de sinais
 #define PASSO 0.5
@@ -131,6 +132,37 @@ class Algoritmo{
 			}
 
 			return calcularCoeficiente(infFinPolinomio);
+		}
+
+
+		/**
+		* Descrição: Método para encontra uma função G para o método do ponto fixo
+		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
+		* @params Intervalo& : Intervalo que se deseja verificar que o polinõmio converge
+		* @return double : Valor final da cota inferior de Lagrange
+		*/
+		Polinomio& criarG(Polinomio& polinomio,Intervalo& intervalo){
+			
+			Polinomio* funcaoG = new Polinomio(polinomio.getGrau());
+
+			for(int i=0;i<=polinomio.getGrau();i++){
+				funcaoG->getPolinomio()[i] = polinomio.getPolinomio()[i]; 
+			}
+
+			//uma formula para a g
+			funcaoG->getPolinomio()[0]+=1;
+			
+			return *funcaoG;
+		}
+
+		/**
+		* Descrição: Método para verificar se o polinômio converge usando o método do ponto fixo
+		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
+		* @params Intervalo& : Intervalo que se deseja verificar que o polinõmio converge
+		* @return double : Valor final da cota inferior de Lagrange
+		*/
+		static bool converge(Polinomio& polinomio,Intervalo& intervalo){
+			return abs(polinomio.getDerivada().getResultado(intervalo.getInicial()))<1 && abs(polinomio.getDerivada().getResultado(intervalo.getFinal()))<1;
 		}
 
 	public:
@@ -272,7 +304,17 @@ class Algoritmo{
 		* @return double : zero da função.
 		*/		
 		static long double metodoDoPontoFixo(Polinomio& polinomio,Intervalo& intervalo){
-			return 0;
+			
+
+
+			//Polinomio para usar como g	
+			Polinomio polinomioG = Polinomio(polinomio.getGrau());
+			/*
+			do{
+
+			}while(abs(polinomioG.getDerivada().getResultado(0)));
+			*/	
+			return -1;
 		}
 
 		/**
@@ -282,7 +324,17 @@ class Algoritmo{
 		* @return double : zero da função.
 		*/		
 		static long double metodoDeNewton(Polinomio& polinomio,Intervalo& intervalo){
-			return 0;
+			return -1;
+		}
+
+		/**
+		* Descrição: Método quase-Newton
+		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
+		* @params Intervalo& : Intervalo em que se deseja procurar o zero da função
+		* @return double : zero da função.
+		*/		
+		static long double metodoQuaseNewton(Polinomio& polinomio,Intervalo& intervalo){
+			return -1;
 		}
 
 };	

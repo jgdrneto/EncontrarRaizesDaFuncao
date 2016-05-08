@@ -176,5 +176,78 @@ class Polinomio{
 			}
 
 			return true;
-		}		
+		}
+		
+		/**
+		* Descrição: Sobrecarga do operador de soma
+		* @Params Polinomio& : Polinomio que se deseja somar
+		* @return Polinomio& : Novo polinômio resultante da soma
+		*/
+		Polinomio& operator+(Polinomio& polinomio){
+			
+			Polinomio* resultado = NULL;
+			
+			long double grauMenor=0;
+
+			if(this->grau >= polinomio.getGrau()){
+
+				//Alocando espaço a partir do maior deles
+				resultado = new Polinomio(this->grau);
+				
+				grauMenor =polinomio.getGrau();
+
+				//Somando a parte em que um deles não te mais coeficientes
+				for(int i =polinomio.getGrau()+1; i<=this->grau;i++){
+					resultado->getPolinomio()[i] = this->p[i];
+				}
+
+			}else{
+				//Alocando espaço a partir do maior deles
+				resultado = new Polinomio(polinomio.getGrau());
+
+				grauMenor= this->grau;
+
+				//Somando a parte em que um deles não te mais coeficientes
+				for(int i =this->grau+1; i<=polinomio.getGrau();i++){
+					resultado->getPolinomio()[i] = polinomio.getPolinomio()[i];
+				}
+			}
+
+			//Somando os dois até achar o menor deles	
+			for(int i =0; i<=grauMenor;i++){
+				resultado->getPolinomio()[i] = this->p[i]+polinomio.getPolinomio()[i];
+			}
+
+			return *resultado;
+		}
+
+		/**
+		* Descrição: Sobrecarga do operador de atribuição
+		* @Params Polinomio& : Polinomio que se deseja copiar
+		* @return Polinomio& : Novo polinômio resultante da cópia
+		*/
+		Polinomio& operator=(Polinomio& polinomio){
+
+			//Criando novo polinomio de mesmo grau
+			Polinomio* resultado = new Polinomio(polinomio.getGrau());
+
+			//Passando valores para o novo polinomio
+			for(int i=0; i <=polinomio.getGrau();i++){
+				resultado->getPolinomio()[i] = polinomio.getPolinomio()[i];
+			}
+			
+			//Retornando o novo polinômio		
+			return *resultado;	
+		}
+
+		/**
+		* Descrição: Sobrecarga do operador de subtração
+		* @Params Polinomio& : Polinomio que se deseja subtrair dele
+		* @return Polinomio& : Novo polinômio resultante da subtração
+		*/
+		Polinomio& operator-(Polinomio& polinomio){
+			//NÃO CONCLUIDO AINDA
+			return *(this) + polinomio; 
+		}
+
 };	
