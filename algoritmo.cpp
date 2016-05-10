@@ -304,11 +304,17 @@ class Algoritmo{
 		* @return double : zero da função.
 		*/		
 		static long double metodoDoPontoFixo(Polinomio& polinomio,Intervalo& intervalo){
-			
-
+			// long double inferior = intervalo.getInicial();
+			// long double superior = intervalo.getFinal();
+			// long double xap, xnovo, x;
 
 			//Polinomio para usar como g	
 			Polinomio polinomioG = Polinomio(polinomio.getGrau());
+			// polinomioG.adicionarValores();
+
+			// xap = inferior;
+
+
 			/*
 			do{
 
@@ -324,7 +330,21 @@ class Algoritmo{
 		* @return double : zero da função.
 		*/		
 		static long double metodoDeNewton(Polinomio& polinomio,Intervalo& intervalo){
-			return -1;
+			long double inferior = intervalo.getInicial();
+			long double superior = intervalo.getFinal();
+			long double xap, xn;
+
+			xap = (inferior + superior) / 2;
+
+			Polinomio fDerivada = polinomio.getDerivada();
+
+			while(abs(polinomio.getResultado(xap) > ERRO){
+				xn = xap - (polinomio.getResultado(xap)/fDerivada.getResultado(xap));
+				xap = xn;
+			}
+			
+
+			return xap;
 		}
 
 		/**
