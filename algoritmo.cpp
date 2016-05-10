@@ -338,11 +338,16 @@ class Algoritmo{
 
 			Polinomio fDerivada = polinomio.getDerivada();
 
-			while(abs(polinomio.getResultado(xap) > ERRO){
-				xn = xap - (polinomio.getResultado(xap)/fDerivada.getResultado(xap));
-				xap = xn;
+			while(abs(polinomio.getResultado(xap)) > ERRO){
+				long double aux = fDerivada.getResultado(xap);
+
+				if(aux != 0.0){
+					xn = xap - (polinomio.getResultado(xap)/aux);
+					xap = xn;	
+				}else{
+					return -1;
+				}
 			}
-			
 
 			return xap;
 		}
