@@ -330,27 +330,27 @@ class Algoritmo{
 		* @return double : zero da função.
 		*/		
 		static long double metodoDeNewton(Polinomio& polinomio,Intervalo& intervalo){
-			long double inferior = intervalo.getInicial();
-			long double superior = intervalo.getFinal();
-			long double xap, xn, aux;
+			
+			//Variáveis
+			long double xap, xn;
 
-			xap = (inferior + superior) / 2;
+			//Calculando ponto médio
+			xap = (intervalo.getInicial() + intervalo.getFinal()) / 2;
 
-			Polinomio fDerivada = polinomio.getDerivada();
-
-			aux = fDerivada.getResultado(xap);
-
-			if(aux == 0.0){
-				cerr << "Não é possível aplicar o método de Newton. f'(xap) = 0." << endl;
-				return -1;
+			//Verificando condições mínimas necessárias para usar o método de newton
+			//Derivada no ponto não pode ser igual a 0.
+			if(polinomio.getDerivada().getResultado(xap)==0){
+				cerr << "Não é possível aplicar o método de Newton." << endl;
+			}else{
+				//Econtrando a aproximação
+				do{
+					//Aplicando método de newton
+					xn = xap - (polinomio.getResultado(xap)/polinomio.getDerivada().getResultado(xap));
+					xap = xn;
+				}while(abs(polinomio.getResultado(xap)) > ERRO);	//Condição de parada f(x)<ERRO
 			}
 
-			while(abs(polinomio.getResultado(xap)) > ERRO){
-				aux = fDerivada.getResultado(xap);
-				xn = xap - (polinomio.getResultado(xap)/aux);
-				xap = xn;
-			}
-
+			//Aproximação menor que o ERRO
 			return xap;
 		}
 
