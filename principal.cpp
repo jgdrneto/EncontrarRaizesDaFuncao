@@ -272,7 +272,7 @@ int main(int argc, char*argv[]){
 
 		cout << "Usando Método quase-Newton usando troca de sinal: " << endl;
 
-		cout << "Valor da aproximação é: " << Algoritmo::metodoQuaseNewton(polinomio, intervalo) << endl;
+		cout << "Valor da aproximação é: " << Algoritmo::metodoQuaseNewton() << endl;
 
 		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoQuaseNewton(polinomio, intervalo)));
 

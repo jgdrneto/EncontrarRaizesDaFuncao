@@ -95,6 +95,19 @@ class Matriz{
 			}
 		}
 
+		void adicionarValores(double valor, int i, int j){
+			if(this->m!=NULL){
+				//Adicona o número na linha i coluna j da matriz
+				m[i][j] = valor;
+			}else{
+				cout << "Espaço para matriz não alocado" << endl;
+			}
+		}
+
+		double getValor(int i, int j){
+			return m[i][j];
+		}
+
 		/**
 		* Descrição: Imprimi a matriz no terminal
 		*/	

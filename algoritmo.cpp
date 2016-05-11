@@ -354,13 +354,58 @@ class Algoritmo{
 			return xap;
 		}
 
+		static Matriz F(Matriz xap){
+			Matriz resultado(2, 1);
+
+			double p1 = (xap.getValor(0, 0) * xap.getValor(0, 0)) + (xap.getValor(1, 0) * xap.getValor(1, 0)) - 1;
+			double p2 = xap.getValor(0, 0) + xap.getValor(1, 0) - 1;
+
+			resultado.adicionarValores(p1, 0, 0);
+			resultado.adicionarValores(p2, 1, 0);
+
+			return resultado;
+		}
+
 		/**
 		* Descrição: Método quase-Newton
 		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
 		* @params Intervalo& : Intervalo em que se deseja procurar o zero da função
 		* @return double : zero da função.
 		*/		
-		static long double metodoQuaseNewton(Polinomio& polinomio,Intervalo& intervalo){
+		static long double metodoQuaseNewton(){
+			Matriz xap(2, 1);
+			Matriz xnovo(2, 1);
+
+			Matriz bap(2, 2);
+			Matriz bap_1(2, 2);
+			Matriz baux(2, 2);
+
+			Matriz deltaF(2, 1);
+			Matriz deltaX(2, 1);
+			Matriz deltaXT(2, 1);
+
+			Matriz u(2, 1);
+
+			xap.adicionarValores();
+			bap = bap.identidade();
+			bap_1 = bap;
+
+			do{
+				xnovo = xap - (bap_1*F(xap));
+				deltaF = F(xnovo) - F(xap);
+				deltaX = xnovo - xap;
+				
+				deltaXT = deltaX;
+				deltaXT.transposta();
+
+				u = (deltaF - (bap * deltaX))/(deltaXT * deltaX);
+				baux = bap;
+				bap = bap + (u * deltaXT);
+				bap_1 = bap_1 - ((bap_1 * u * deltaX * bap_1)/(1 + deltaXT * bap_1 * u));
+				xap = xnovo;
+			}while(0);
+
+
 			return -1;
 		}
 
