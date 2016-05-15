@@ -121,6 +121,28 @@ class Matriz{
 		}
 
 		/**
+		* Descrição: Sobrecarga do operador de atribuição
+		* @params: Matriz na qual se deseja fazer a atribuição
+		* @return: Endereço da matriz resultante da operação de multplicação
+		*/
+		void operator=(Matriz& matriz2){
+			//Criando nova matriz
+			Matriz* resultado = new Matriz(matriz2.getNumeroL(),matriz2.getNumeroC());
+			
+			//Passando os valores	
+			for(int i = 0;i < matriz2.getNumeroL(); i++){
+				for(int j = 0;j < matriz2.getNumeroC();j++){
+					resultado->getMatriz()[i][i] = matriz2.m[i][i];
+				}
+			}
+
+			//Atribuindo os valores
+			this->m = resultado->getMatriz();
+			this->c = resultado->getNumeroC();
+			this->l = resultado->getNumeroL(); 
+		}
+
+		/**
 		* Descrição: Sobrecarga do operador de multiplicação
 		* @params: Matriz na qual se deseja fazer a multiplicação
 		* @return: Endereço da matriz resultante da operação de multplicação
@@ -346,45 +368,5 @@ class Matriz{
 			}
 
 			return valor;	
-		}
-
-		/**
-		* Descrição: Verifica se a matriz converge
-		* @return: TRUE caso convirja e FALSE caso contrário
-		*/
-		bool converge(){
-			if(this->l ==this->c){
-				//Vetor com os betas
-				Matriz matrizBeta(this->l,1);
-				double soma=0,somaDeLinhas=0;
-				bool pivoMaior=true;
-				
-				//Atribuindo valores iniciais aos betas
-				for(int i=0;i<this->l;i++){
-					matrizBeta.getMatriz()[i][0]=1;
-				}
-
-				//Encontrando os betas	
-				for(int i=0;i<this->l;i++){
-					soma=0;
-					somaDeLinhas=0;
-					for(int j=0;j<this->c;j++){
-						if(j!=i){
-							soma+= abs(this->m[i][j])*matrizBeta.getMatriz()[j][0];
-							somaDeLinhas+= abs(this->m[i][j]);
-						}
-					}
-					//Encontra os betas
-					matrizBeta.getMatriz()[i][0] = soma/this->m[i][i];
-					//Faz a verificação por cirtério de linhas
-					pivoMaior = pivoMaior && this->m[i][i]>somaDeLinhas;
-				}
-
-				//Retorna se a matriz converge ou não
-				return matrizBeta.maiorValor()<1 || pivoMaior;
-			}
-
-			return false;
-		}
-		
+		}		
 };	

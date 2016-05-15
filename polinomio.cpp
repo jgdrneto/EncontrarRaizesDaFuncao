@@ -117,7 +117,7 @@ class Polinomio{
 			//imprime o polinômio
 			for(int i = grau;i >= 0; i--){
 				//Imprime o valor de "+" do polinômio, caso tenha
-				if(p[i]>0){
+				if(p[i]>=0){
 					cout << "+";
 				}
 				cout << this->p[i] << "x^" << i << " "; 	
@@ -179,6 +179,78 @@ class Polinomio{
 		}
 		
 		/**
+		* Descrição: Sobrecarga do operador de multiplicação
+		* @Params Polinomio& : Polinomio que se deseja multiplicar
+		* @return Polinomio& : Novo polinômio resultante da multiplicação
+		*/
+		Polinomio& operator*(Polinomio& polinomio){
+			
+			//Criando o polinômio resultante
+			Polinomio* resultado = new Polinomio(this->grau+polinomio.getGrau());
+			
+			//Verificando se um dos polinômios é nulo
+			if((this->grau == 0 && this->p[0]==0)||(polinomio.getGrau()==0 && polinomio.getPolinomio()[0]==0)){
+				resultado = new Polinomio(0);
+			}else{
+				//Salvando os valores no novo polinômio
+				for(int i=0;i<=this->grau;i++){
+					for(int j=0; j<=polinomio.getGrau();j++){
+						resultado->getPolinomio()[i+j] = resultado->getPolinomio()[i+j] + this->p[i]*polinomio.getPolinomio()[j];
+					}
+				}
+			}	
+			return *(resultado);
+		}
+
+		/**
+		* Descrição: Sobrecarga do operador de multiplicação por número
+		* @Params long double : Polinomio que se deseja multiplicar
+		* @return Polinomio& : Novo polinômio resultante da multiplicação
+		*/
+		Polinomio& operator*(long double numero){
+			//Criando novo polinômio			
+			Polinomio* resultado = new Polinomio(this->grau); 
+
+			//Atribuindo valores do polinômio para o novo
+			*(resultado) = *(this);
+
+			//Multiplicando tudo pelo numero
+			for(int i=0;i<=this->grau;i++){
+				resultado->getPolinomio()[i]*=numero;
+			}
+
+			return *(resultado);
+		}
+
+		/**
+		* Descrição: Sobrecarga do operador de divisão por número
+		* @Params long double : Polinomio que se deseja multiplicar
+		* @return Polinomio& : Novo polinômio resultante da multiplicação
+		*/
+		Polinomio& operator/(long double numero){
+			if(numero!=0){
+
+				//Criando novo polinômio			
+				Polinomio* resultado = new Polinomio(this->grau); 
+
+				//Atribuindo valores do polinômio para o novo
+				*(resultado) = *(this);
+
+				//Multiplicando tudo pelo numero
+				for(int i=0;i<=this->grau;i++){
+					resultado->getPolinomio()[i]= resultado->getPolinomio()[i]/numero;
+				}
+
+				return *resultado;
+
+			}else{
+				cerr << "ERRO: não existe número real em divisão por 0" << endl;
+			}
+
+			return *(new Polinomio(0));
+		}
+
+		/**
 		* Descrição: Sobrecarga do operador de soma
 		* @Params Polinomio& : Polinomio que se deseja somar
 		* @return Polinomio& : Novo polinômio resultante da soma
@@ -226,7 +298,7 @@ class Polinomio{
 		* @Params Polinomio& : Polinomio que se deseja copiar
 		* @return Polinomio& : Novo polinômio resultante da cópia
 		*/
-		Polinomio& operator=(Polinomio& polinomio){
+		void operator=(Polinomio& polinomio){
 
 			//Criando novo polinomio de mesmo grau
 			Polinomio* resultado = new Polinomio(polinomio.getGrau());
@@ -235,19 +307,42 @@ class Polinomio{
 			for(int i=0; i <=polinomio.getGrau();i++){
 				resultado->getPolinomio()[i] = polinomio.getPolinomio()[i];
 			}
-			
-			//Retornando o novo polinômio		
-			return *resultado;	
+		
+			//Atualizando os valores de this
+			this->grau = resultado->getGrau();
+			this->p = resultado->getPolinomio();
+				
 		}
 
 		/**
-		* Descrição: Sobrecarga do operador de subtração
+		* Descrição: Sobrecarga do operador de inversão unário
+		* @return Polinomio& : Novo polinômio resultante da inversão
+		*/
+		Polinomio& operator-(){
+			
+			//Criando novo polinomio
+			Polinomio* inverso = new Polinomio(this->grau);
+
+			//Atribuição usando sobrecarga do operador=
+			*(inverso)=*(this);
+
+			//invertendo os valores
+			for(int i=0;i<=inverso->getGrau();i++){
+				inverso->getPolinomio()[i]*= -1;
+			}
+
+			return *(inverso); 
+		}
+
+		/**
+		* Descrição: Sobrecarga do operador de subtração binário
 		* @Params Polinomio& : Polinomio que se deseja subtrair dele
 		* @return Polinomio& : Novo polinômio resultante da subtração
 		*/
 		Polinomio& operator-(Polinomio& polinomio){
 			//NÃO CONCLUIDO AINDA
-			return *(this) + polinomio; 
+
+			return *(this) + (-polinomio); 
 		}
 
 };	

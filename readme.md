@@ -24,8 +24,10 @@ Esse é um projeto de criação de algoritmos para encontrar um x pertecente ao 
 	2. Método da Corda
 	3. Método do ponto fixo	
 	4. Método de Newton
-	5. Método quase-Newton
- 
+
+3. Sistemas não-lineares
+	1. Método quase-Newton 
+
 ## **COMANDOS**
 
 ### Compilação:

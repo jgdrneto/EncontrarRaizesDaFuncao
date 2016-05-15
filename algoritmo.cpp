@@ -165,6 +165,15 @@ class Algoritmo{
 			return abs(polinomio.getDerivada().getResultado(intervalo.getInicial()))<1 && abs(polinomio.getDerivada().getResultado(intervalo.getFinal()))<1;
 		}
 
+		/**
+		* Descrição: Método para verificar se o polinomio converge usando o método do ponto fixo
+		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
+		* @params long double : Intervalo que se deseja verificar que o polinõmio converge
+		* @return double : TRUE caso convirja ou FALSE caso não convirja
+		*/
+		static bool convergePontoFixo(Polinomio& polinomio,long double inicial){
+			return abs(polinomio.getDerivada().getResultado(0))<1;
+		}
 	public:
 		
 		/**
@@ -304,23 +313,70 @@ class Algoritmo{
 		* @return double : zero da função.
 		*/		
 		static long double metodoDoPontoFixo(Polinomio& polinomio,Intervalo& intervalo){
-			// long double inferior = intervalo.getInicial();
-			// long double superior = intervalo.getFinal();
-			// long double xap, xnovo, x;
 
-			//Polinomio para usar como g	
-			Polinomio polinomioG = Polinomio(polinomio.getGrau());
-			// polinomioG.adicionarValores();
+			long double resultado=0, resultadoAnt=intervalo.getInicial();
 
-			// xap = inferior;
+			//Criando polinomio (P(x) = x)
+			Polinomio* g = new Polinomio(1);
+			g->getPolinomio()[1]=1;
 
+			//Tentando usar método de Newton
+			if(polinomio.getDerivada().getResultado(intervalo.getInicial())!=0){
+				
+				*g = ((*g)*polinomio.getDerivada()) - polinomio;
 
-			/*
+				//Calculando pelo método do ponto fixo
+				do{
+					resultado = g->getResultado(resultadoAnt)/polinomio.getDerivada().getResultado(resultadoAnt);
+					resultadoAnt = resultado;
+				}while(abs(polinomio.getResultado(resultado))>=ERRO);
+
+				return resultado;
+
+			}else{
+				//Polinomio de tentativa
+				Polinomio tentativa(0);
+
+				//Contador para ajudar na procura da g
+				int i=0;
+
+				//Tentando encontrar a g de x para o ponto fixo
+				do{
+					tentativa = ((*g)*i) + polinomio;
+					tentativa = tentativa/i;
+					i++;
+				}while(!convergePontoFixo(tentativa,intervalo.getInicial()) && i<=11);
+
+				//Se convergiu
+				if(i<=10){
+					*g = tentativa;
+				}else{
+					//Caso não se encotre a g anteriormente
+					int x=0;
+					
+					do{
+						//Definindo o grau do polinômio
+						cout << "\nNão foi possível encontrar uma g ou a g informada não converge, por favor, digite uma nova g:" << endl; 
+						cout << "Grau do polinômio: ";
+						cin >> x;
+
+						//Criando novo polonômio com o grau informado pelo usuário
+						g = new Polinomio(x);
+
+						//Adicionando os valores
+						g->adicionarValores();
+
+					}while(!convergePontoFixo(*g,intervalo.getInicial()));
+				}	
+			}
+
+			//Executando o método do ponto fixo
 			do{
+				resultado = g->getResultado(resultadoAnt);
+				resultadoAnt = resultado;
+			}while(abs(polinomio.getResultado(resultado))>=ERRO);
 
-			}while(abs(polinomioG.getDerivada().getResultado(0)));
-			*/	
-			return -1;
+			return resultado;
 		}
 
 		/**
@@ -354,6 +410,11 @@ class Algoritmo{
 			return xap;
 		}
 
+		/**
+		* Descrição: Matriz F
+		* @params Matriz : Matriz ???
+		* @return Matriz : ???
+		*/
 		static Matriz F(Matriz xap){
 			Matriz resultado(2, 1);
 
@@ -373,6 +434,7 @@ class Algoritmo{
 		* @return double : zero da função.
 		*/		
 		static long double metodoQuaseNewton(){
+			/*
 			Matriz xap(2, 1);
 			Matriz xnovo(2, 1);
 
@@ -405,7 +467,7 @@ class Algoritmo{
 				xap = xnovo;
 			}while(0);
 
-
+			*/
 			return -1;
 		}
 

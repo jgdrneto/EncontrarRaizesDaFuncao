@@ -15,11 +15,11 @@ void limpaTela(){
 
 /*
 * Descrição: Aplica o algorimo escolhido pelo usuário 
+* @params int : número do algoritmo de refinamento  que se deseja executar
 * @params int : número do algoritmo de isolamento que se deseja executar
-* @params int : número do algoritmo de refinamento que se deseja executar
 * @params Polinomio& : Polinômio em que se deseja aplicar o algoritmo	
 */
-void aplicarAlgorimo(int escolhaIsolamento,int escolhaRefinamento, Polinomio& polinomio){
+void aplicarAlgorimo(int escolhaRefinamento, int escolhaIsolamento, Polinomio& polinomio){
 	//Intervalo que será obtido no isolamento
 	Intervalo intervalo; 
 
@@ -30,7 +30,7 @@ void aplicarAlgorimo(int escolhaIsolamento,int escolhaRefinamento, Polinomio& po
 			int xInicial;
 
 			//Pedindo o x inicial ao usuário
-			cout << "Escolha o x inicial: ";
+			cout << "Escolha o x inicial para o método de isolamento de troca de sinal: ";
 			cin >> xInicial;
 
 			intervalo = Algoritmo::metodoTrocaDeSinal(polinomio, xInicial);
@@ -69,18 +69,38 @@ void aplicarAlgorimo(int escolhaIsolamento,int escolhaRefinamento, Polinomio& po
 			aproximacao = Algoritmo::metodoDeNewton(polinomio, intervalo);
 			cout << aproximacao << endl;
 		break;
-		case 5:
-			cout << "Resultado usando método quase-Newton: "; 
-			cout << Algoritmo::metodoDeNewton(polinomio, intervalo) << endl;
-		break;
 	}
+
+	printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(aproximacao));
 }
 
 /**
 * Descrição: Escreve o menu de escolha dos algoritmos no terminal
 * @return : Inteiro representando a escolha do usuário
 */
+int menuInicial(){	
+	//Inicializando variáveis
+	int escolha = 0;	
+	//Menu para escolha do métodode isolamento que se deseja utilizar
+	do {
+		cout << "Deseja resolver encontrar raíze(s) de uma equação ou um sistema de equações:" << endl;
+		cout << "1 - Uma equação" <<endl;
+		cout << "2 - Sistema de equações" << endl;
+		cout << "-> ";
+		cin >> escolha;
+	}while(escolha <1 || escolha >2);
 
+	//Limpa a tela do console
+	limpaTela();
+
+	//Retorna o valor da escolha
+	return escolha;
+}
+
+/**
+* Descrição: Escreve o menu de escolha dos algoritmos no terminal
+* @return : Inteiro representando a escolha do usuário
+*/
 int menuIsolamento(){
 	
 	//Inicializando variáveis
@@ -117,10 +137,9 @@ int menuRefinamento(){
 		cout << "2 - Método das cordas" << endl;
 		cout << "3 - Método do ponto fixo" << endl;
 		cout << "4 - Método de Newton" << endl;
-		cout << "5 - Método quase-Newton" << endl;
 		cout << "-> ";
 		cin >> escolha;
-	}while(escolha <1 || escolha >2);
+	}while(escolha <1 || escolha >4);
 
 	//Limpa a tela do console
 	limpaTela();
@@ -169,23 +188,39 @@ int main(int argc, char*argv[]){
 	
 	//Verifica se foi solicitado o teste ou não
 	if(!teste(argc,argv)){	
-		//Estrutura de repetição para decidir o grau do polinômio
-		do{
-			cout << "Digite o grau do polinômio: ";
-			cin >> n;
-		}while(n == -1);
 
-		//Cria o polinômio
-		Polinomio polinomio(n);
+		//Decide se vai ser método de quase-Newton ou não
+		int i = menuInicial();
 
-		//Adiciona os valores númericos na matriz
-		polinomio.adicionarValores();
+		//Uma equação
+		if(i==1){
+			do{
+				//Estrutura de repetição para decidir o grau do polinômio
+				cout << "Digite o grau do polinômio: ";
+				cin >> n;
+			}while(n == -1);
 
-		cout << "Polinômio: ";
-		polinomio.imprimir();
+			//Cria o polinômio
+			Polinomio polinomio(n);
 
-	 	//Aplicando os algoritmos
-		aplicarAlgorimo(menuIsolamento(),menuRefinamento(), polinomio);
+			//Adiciona os valores númericos na matriz
+			polinomio.adicionarValores();
+
+			cout << "Polinômio: ";
+			polinomio.imprimir();
+
+		 	//Aplicando os algoritmos
+			aplicarAlgorimo(menuRefinamento(),menuIsolamento(), polinomio);
+		}else{
+
+			//Sistema de equações
+			do{
+				cout << "Digite a quantidade de variáveis do seu sistema" << endl;
+				cin >> n;
+			}while(n==-1);
+
+
+		}
 	}else{
 		
 		//Área reservada a testes
@@ -267,21 +302,7 @@ int main(int argc, char*argv[]){
 		}else{
 			cout << "ERRADO" << endl;
 		}
-
-		cout << "----------------------------------------------------" << endl;
-
-		cout << "Usando Método quase-Newton usando troca de sinal: " << endl;
-
-		cout << "Valor da aproximação é: " << Algoritmo::metodoQuaseNewton() << endl;
-
-		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoQuaseNewton(polinomio, intervalo)));
-
-		if(abs(polinomio.getResultado(Algoritmo::metodoQuaseNewton(polinomio, intervalo))) <=ERRO){
-			cout << "CORRETO" << endl;
-		}else{
-			cout << "ERRADO" << endl;
-		}
-
+		
 		cout << "----------------------------------------------------" << endl;
 
 		//Verificando soluções por LAGRANGE
@@ -353,21 +374,36 @@ int main(int argc, char*argv[]){
 		}
 
 		cout << "----------------------------------------------------" << endl;
+		
+		cout << "Sistemas não-lineares" << endl;
+		
+		cout << "----------------------------------------------------" << endl;
 
-		cout << "Usando Método quase-Newton usando Lagrange: " << endl;
+		/*Essa parte é bastante diferente das outras, é preciso criar uma matriz coluna de soluções e
+		  usar uma matriz de polinômios compostos (para ser a F(x)). Uma maneira de fazer isso é usar herança para uma nova classe	
+		  chamanda polinomio composto, e nela estiver uma lista de polinomios simples, um polinomio para cada variável
+		  
+		  Obs: É importante usar uma nova classe para usar como polinomio composto, já que em um mesmo 
+		  polinomio composto poderemos ter P(x,y)= x^2 + y^4 + y^3 + x + 1. O q dificulta muito somente a classe
+		  feita aqui ainda  
 
-		cout << "Valor da aproximação é: " << Algoritmo::metodoQuaseNewton(polinomio, intervalo) << endl;
+		  Pode-se deixar a classe matriz totalmente template, e usá-la no lugar da lista que estará 
+		  em polinômios compostos.	
+		  	
+		*/
+		cout << "Usando Método quase-Newton: " << endl;
 
-		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoQuaseNewton(polinomio, intervalo)));
+		cout << "Valor da aproximação é: " << Algoritmo::metodoQuaseNewton() << endl;
 
-		if(abs(polinomio.getResultado(Algoritmo::metodoQuaseNewton(polinomio, intervalo))) <=ERRO){
+		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoQuaseNewton()));
+
+		if(abs(polinomio.getResultado(Algoritmo::metodoQuaseNewton())) <=ERRO){
 			cout << "CORRETO" << endl;
 		}else{
 			cout << "ERRADO" << endl;
 		}
 
-		cout << "----------------------------------------------------" << endl;
-
+		cout << "----------------------------------------------------" << endl;		
 	}
 
 	return 0;
