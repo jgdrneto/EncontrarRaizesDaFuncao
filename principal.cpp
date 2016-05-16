@@ -393,15 +393,24 @@ int main(int argc, char*argv[]){
 		*/
 		cout << "Usando Método quase-Newton: " << endl;
 
-		cout << "Valor da aproximação é: " << Algoritmo::metodoQuaseNewton() << endl;
+		Matriz *xap = new Matriz(2,1);
+		*xap = Algoritmo::metodoQuaseNewton();
 
-		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoQuaseNewton()));
+		Matriz *resultado = new Matriz(2,1);
+		*resultado = Algoritmo::F(*xap);
 
-		if(abs(polinomio.getResultado(Algoritmo::metodoQuaseNewton())) <=ERRO){
+		cout << "Valor da aproximação é: [ " << xap->getValor(0,0) << "  " << xap->getValor(1,0) << "]" << endl;
+
+		printf("Resultado aplicado no polinomio:[ %.15f  %.15f ]\n", resultado->getValor(0,0), resultado->getValor(1,0));
+
+		if(abs(resultado->getValor(0,0)) || abs(resultado->getValor(1,0)) <=ERRO){
 			cout << "CORRETO" << endl;
 		}else{
 			cout << "ERRADO" << endl;
 		}
+
+		free(resultado);
+		free(xap);
 
 		cout << "----------------------------------------------------" << endl;		
 	}

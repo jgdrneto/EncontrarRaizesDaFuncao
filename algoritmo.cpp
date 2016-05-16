@@ -415,16 +415,18 @@ class Algoritmo{
 		* @params Matriz : Matriz ???
 		* @return Matriz : ???
 		*/
-		static Matriz F(Matriz xap){
-			Matriz resultado(2, 1);
+		static Matriz& F(Matriz xap){
+			Matriz *resultado = new Matriz(2, 1);
 
-			double p1 = (xap.getValor(0, 0) * xap.getValor(0, 0)) + (xap.getValor(1, 0) * xap.getValor(1, 0)) - 1;
-			double p2 = xap.getValor(0, 0) + xap.getValor(1, 0) - 1;
+			double p1 = (xap.getValor(0, 0) * xap.getValor(0, 0)) + (xap.getValor(1, 0) * xap.getValor(1, 0)) - 1.0;
+			double p2 = xap.getValor(0, 0) + xap.getValor(1, 0) - 1.0;
 
-			resultado.adicionarValores(p1, 0, 0);
-			resultado.adicionarValores(p2, 1, 0);
+			cout << "Aqui " << p2 << endl;
 
-			return resultado;
+			resultado->adicionarValores(p1, 0, 0);
+			resultado->adicionarValores(p2, 1, 0);
+
+			return *resultado;
 		}
 
 		/**
@@ -433,42 +435,62 @@ class Algoritmo{
 		* @params Intervalo& : Intervalo em que se deseja procurar o zero da função
 		* @return double : zero da função.
 		*/		
-		static long double metodoQuaseNewton(){
-			/*
-			Matriz xap(2, 1);
-			Matriz xnovo(2, 1);
+		static Matriz& metodoQuaseNewton(){
+			
+			Matriz *xap = new Matriz(2, 1);
+			Matriz *xnovo = new Matriz(2, 1);
 
-			Matriz bap(2, 2);
-			Matriz bap_1(2, 2);
-			Matriz baux(2, 2);
+			Matriz *bap = new Matriz(2, 2);
+			Matriz *bap_1 = new Matriz(2, 2);
+			Matriz *baux = new Matriz(2, 2);
 
-			Matriz deltaF(2, 1);
-			Matriz deltaX(2, 1);
-			Matriz deltaXT(2, 1);
+			Matriz *deltaF = new Matriz(2, 1);
+			Matriz *deltaX = new Matriz(2, 1);
+			Matriz *deltaXT = new Matriz(1, 2);
 
-			Matriz u(2, 1);
+			Matriz *u = new Matriz(2, 1);
+			Matriz *resultado = new Matriz(2, 1);
+			Matriz *resultado2 = new Matriz(2, 1);
 
-			xap.adicionarValores();
-			bap = bap.identidade();
+			double v1, v2;
+
+			for(int i = 0; i < 2; i++){
+				xap->adicionarValores(0.0, i, 0);
+			}
+
+			bap = &bap->identidade();
 			bap_1 = bap;
 
 			do{
-				xnovo = xap - (bap_1*F(xap));
-				deltaF = F(xnovo) - F(xap);
-				deltaX = xnovo - xap;
+				*resultado = F(*xap);
+				*xnovo = *xap - (*bap_1 * *resultado);
+				free(resultado);
+
+				*resultado = F(*xnovo);
+				*resultado2 = F(*xap);
+				*deltaF = *resultado - *resultado2;
+				free(resultado);
+				free(resultado2);
+
+				*deltaX = (*xnovo - *xap);
 				
-				deltaXT = deltaX;
-				deltaXT.transposta();
+				*deltaXT = deltaX->getTranspostaVetor();
 
-				u = (deltaF - (bap * deltaX))/(deltaXT * deltaX);
+				*u = (*deltaF - (*bap * *deltaX)).produtoPorEscalar(1.0/(*deltaXT * *deltaX).getValor(0,0));
 				baux = bap;
-				bap = bap + (u * deltaXT);
-				bap_1 = bap_1 - ((bap_1 * u * deltaX * bap_1)/(1 + deltaXT * bap_1 * u));
+				*bap = *bap + (*u * *deltaXT);
+				*bap_1 = *bap_1 - ((*bap_1 * *u * *deltaXT * *bap_1).produtoPorEscalar(1.0/((*deltaXT * *bap_1) * *u).somaPorEscalar(1.0).getValor(0,0)));
 				xap = xnovo;
-			}while(0);
 
-			*/
-			return -1;
+				*resultado = F(*xap);
+				v1 = abs(resultado->getValor(0,0));
+				v2 = abs(resultado->getValor(1,0));
+
+				free(resultado);
+
+			}while(v1 > ERRO && v2 > ERRO);//v1 > ERRO || v2 > ERRO);//abs(F(*xap).getValor(0,0)) > ERRO);// || abs(F(*xap).getValor(1,0)) > ERRO);	//Condição de parada F(x)<ERRO
+
+			return *xap;//F(*xap).getValor(0,0);
 		}
 
 };	

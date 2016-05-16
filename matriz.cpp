@@ -123,7 +123,7 @@ class Matriz{
 		/**
 		* Descrição: Sobrecarga do operador de atribuição
 		* @params: Matriz na qual se deseja fazer a atribuição
-		* @return: Endereço da matriz resultante da operação de multplicação
+		* @return: Endereço da matriz resultante da operação de atribuição
 		*/
 		void operator=(Matriz& matriz2){
 			//Criando nova matriz
@@ -294,6 +294,26 @@ class Matriz{
 		}
 
 		/**
+		* Descrição: Retorna o vetor transposto
+		*/
+		Matriz& getTranspostaVetor(){
+			Matriz *resultado;
+			if(this->c == 1){
+				resultado = new Matriz(1, this->l);
+				for(int i = 0; i < this->l; i++){
+					resultado->getMatriz()[0][i] = this->getMatriz()[i][0];
+				}
+			}else{
+				resultado = new Matriz(this->c, 1);
+				for(int i = 0; i < this->c; i++){
+					resultado->getMatriz()[i][0] = this->getMatriz()[0][i];
+				}
+			}
+
+			return *resultado;
+		}
+
+		/**
 		* Descrição: Encontra a matriz diagonal
 		* @return: A matriz diagonal correspondente
 		*/
@@ -368,5 +388,36 @@ class Matriz{
 			}
 
 			return valor;	
-		}		
-};	
+		}
+
+		/**
+		* Descrição: Multiplica um escalar pela matriz
+		* @return: Matriz& : matriz multiplicada
+		*/
+		Matriz& produtoPorEscalar(double escalar){
+			Matriz *resultado = new Matriz(this->l, this->c);
+			for(int i = 0; i < this->l; i++){
+				for(int j = 0; j < this->c; j++){
+					resultado->getMatriz()[i][j] = this->getMatriz()[i][j] * escalar;
+				}
+			}
+
+			return *resultado;
+		}
+
+		/**
+		* Descrição: Soma um escalar à matriz
+		* @return: Matriz& : matriz somada
+		*/
+		Matriz& somaPorEscalar(double escalar){
+			Matriz *resultado = new Matriz(this->l, this->c);
+			for(int i = 0; i < this->l; i++){
+				for(int j = 0; j < this->c; j++){
+					resultado->getMatriz()[i][j] = this->getMatriz()[i][j] + escalar;
+				}
+			}
+
+			return *resultado;
+		}
+
+};
