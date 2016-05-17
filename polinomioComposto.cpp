@@ -11,6 +11,18 @@ class PolinomioComposto
     int qtdVariaveis; //quantidade de variaveis.
     
     public:
+        
+        /**
+		* Descrição: Construtor do programa
+		* @params int : Quantidade de variáveis
+		*/
+    	PolinomioComposto():
+    	pc(NULL),
+    	qtdVariaveis(0)
+    	{
+    		this->pc = new Polinomio[1];
+    	}
+
         /**
 		* Descrição: Construtor do programa
 		* @params int : Quantidade de variáveis
@@ -20,12 +32,7 @@ class PolinomioComposto
 		qtdVariaveis(v){
 
 			//Alocando espaço para o polinômio composto
-			this->pc = new long double[v];
-
-			//Iniciando com 0 em todo o polinômio composto
-			for(int i;i<=v;i++){
-				this->pc[i] = new Polinomio(0);
-			}
+			this->pc = new Polinomio[v];
 		}
 
 		/**
@@ -79,4 +86,4 @@ class PolinomioComposto
 			cout << "" << endl;
 		}
 		
-}
+};

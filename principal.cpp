@@ -391,6 +391,7 @@ int main(int argc, char*argv[]){
 		  em polinômios compostos.	
 		  	
 		*/
+		/*  
 		cout << "Usando Método quase-Newton: " << endl;
 
 		Matriz *xap = new Matriz(2,1);
@@ -411,7 +412,7 @@ int main(int argc, char*argv[]){
 
 		free(resultado);
 		free(xap);
-
+		*/
 		cout << "----------------------------------------------------" << endl;		
 	}
 

@@ -18,6 +18,22 @@ class Polinomio{
 		* Descrição: Construtor do programa
 		* @params int : Grau do polinômio
 		*/
+		Polinomio():
+		p(NULL),
+		grau(0)
+		{
+			//Criando polinômio padrão
+			this->p = new long double[1];
+
+			//Adicionando valor inicial
+			this->p[0]=0;
+			
+		}
+
+		/**
+		* Descrição: Construtor do programa
+		* @params int : Grau do polinômio
+		*/
 		Polinomio(int g):
 		p(NULL),
 		grau(g){

@@ -1,6 +1,8 @@
 #include <iostream>
 
-class matrizPolinomioComposto
+#include "polinomioComposto.cpp"
+
+class MatrizPolinomioComposto
 {
     private:
     // Atributos da classe
@@ -12,23 +14,18 @@ class matrizPolinomioComposto
 		* Descrição: Construtor do programa
 		* @params int : Quantidade de variáveis
 		*/
-		matrizPolinomioComposto(int qtdPolinomioComposto):
+		MatrizPolinomioComposto(int qtdPolinomioComposto):
 		mpc(NULL),
 		qtdPc(qtdPolinomioComposto){
 
 			//Alocando espaço para o polinômio composto
-			this->mpc = new PolinomioComposto[ qtdPolinomioComposto];
-
-			//Iniciando com 0 em todo o polinômio composto
-			for(int i;i<= qtdPolinomioComposto;i++){
-				this->mpc[i] = new PolinomioComposto(0);
-			}
+			this->mpc = new PolinomioComposto[qtdPolinomioComposto];
 		}
 
 		/**
 		* Descrição: Destrutor da classe
 		*/
-		~matrizPolinomioComposto(){
+		~MatrizPolinomioComposto(){
 			delete[] this->mpc;
 		}   
 		
@@ -44,7 +41,7 @@ class matrizPolinomioComposto
 		* Descrição: Retorna a quantidade de polinômios
 		* @return :  Inteiro com a quantidade de polinômios
 		*/
-		int getqtdPc(){
+		int getQtdPc(){
 			return this->qtdPc;
 		}
 		
@@ -58,10 +55,10 @@ class matrizPolinomioComposto
 			
 			//Somatório da aplicação do x em cada termo do polinômio
 			for(int i=0;i<=this->qtdPc;i++){
-				soma->getMatriz()[i][0] += this->mpc[i].getResultado(v.getMatriz()[i][0]) ; 
+				soma->getMatriz()[i][0] += this->mpc[i].getResultado(v) ; 
 			}
 
-			return soma;
+			return *soma;
 		}
 		
-}
+};

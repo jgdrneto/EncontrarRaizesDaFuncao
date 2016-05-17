@@ -1,6 +1,4 @@
-#include "polinomio.cpp"
 #include "intervalo.cpp"
-#include "matriz.cpp"
 #include "matrizPolinomioComposto.cpp"
 
 //Constante usado no passo do método de troca de sinais
@@ -18,7 +16,7 @@ class Algoritmo{
 
 		Algoritmo(){/*NULO*/}
 		
-		bool satisfaz(MatrizPolinomioComposto& F, matriz& xap){
+		static bool satisfaz(MatrizPolinomioComposto& F, Matriz& xap){
 			for(int i=0;i<F.getQtdPc();i++){
 				if(abs(F.getPolinomioComposto()[i].getResultado(xap))>ERRO){
 					return false;
@@ -427,7 +425,7 @@ class Algoritmo{
 		* @params Intervalo& : Intervalo em que se deseja procurar o zero da função
 		* @return double : zero da função.
 		*/		
-		static Matriz& metodoQuaseNewton(MatrizPolinomioComposto& F, matriz& xInicial){
+		static Matriz& metodoQuaseNewton(MatrizPolinomioComposto& F, Matriz& xInicial){
 			
 			Matriz bap(F.getQtdPc(),F.getQtdPc());
 
@@ -439,33 +437,35 @@ class Algoritmo{
 			Matriz bap_1(1,1);
 			Matriz baux_1(1,1);
 			
-			Matriz xap = xInicial;		// x^(ap) <- x^(inicial) 
-			bap = bap->identidade();  	// B_(ap) <- I
+			Matriz* xap =  new Matriz(1,1);  //Compilador reclamou
+
+			(*xap) = xInicial;			// x^(ap) <- x^(inicial) 	
+			bap = bap.identidade();  	// B_(ap) <- I
 			bap_1 = bap.identidade();   // B_(ap)^(-1) = I
-			baux_1 = bap.identidade()   // B_aux^(-1) = I
+			baux_1 = bap.identidade();   // B_aux^(-1) = I
 			
 			do{
 				
-				xnovo = xap - bap_1 * F.getResultado(xap); // x^Novo = x^ap - Bap^(-1)*F(x^(ap))
+				xnovo = (*xap) - bap_1 * F.getResultado(*(xap)); // x^Novo = x^ap - Bap^(-1)*F(x^(ap))
 				
-				deltaF = F.getResultado(xnovo) - F.getResultado(xap) // /\F = F(x^(novo)) - F(x^(ap)) 
+				deltaF = F.getResultado(xnovo) - F.getResultado(*(xap)); // /\F = F(x^(novo)) - F(x^(ap)) 
 				
-				deltaX = xnovo - xap; // /\X = x^(novo) - x^(ap)
+				deltaX = xnovo - (*xap); // /\X = x^(novo) - x^(ap)
 				
-				u = (deltaF-(bap*deltaF))/(deltaX.transposta()* deltaX) //u = (/\F  - B_(ap) * /\X)/ /\X^T * /\X
+				u = (deltaF-(bap*deltaF))/(deltaX.transposta()* deltaX); //u = (/\F  - B_(ap) * /\X)/ /\X^T * /\X
 				
 				baux = bap; // B_(aux) = B_(ap)
 				
 				bap = bap + (u * deltaX.transposta()); //B_(ap) = B(ap) + u * /\X^T  
 				
 				//É B_AUX^(-1), DEPOIS IMPLEMENTO A INVERSA
-				bap_1 = baux - (baux_1 * u * deltaX.transposta() *baux_1)/((deltaX.transposta() * baux_1 * u)+1)   
+				bap_1 = baux - (baux_1 * u * deltaX.transposta() *baux_1)/((deltaX.transposta() * baux_1 * u)+1);   
 				
-				xap = xnovo; //x(ap) = x^(novo)
+				*(xap) = xnovo; //x(ap) = x^(novo)
 
-			}while(!satisfaz(F,xap));
+			}while(!satisfaz(F,(*xap)));
 
-			return xap;
+			return *xap;
 		}
 
 };	

@@ -370,30 +370,6 @@ class Matriz{
 
 			return valor;	
 		}
-	
-		/**
-		* Descrição: Sobrecarga do operador de atribuição
-		* @Params Polinomio& : Matriz que se deseja copiar
-		* @return Polinomio& : Nova matriz resultante da cópia
-		*/
-		void operator=(Matriz& matriz){
-
-			//Criando nova matriz de msm tamanho da passada por parâmetro
-			Matriz* resultado = new Matriz(matriz.getNumeroL(), matriz.getNumeroC());
-
-			//Passando valores para a nova matriz
-			for(int i = 0; i < matriz.getNumeroL(); i++){
-				for(int j = 0; j < matriz.getNumeroC(); j++){
-					resultado->getMatriz()[i][j] = matriz.getMatriz()[i][j];
-				}
-			}
-		
-			//Atualizando os valores de this
-			this->l = resultado->getNumeroL();
-			this->c = resultado->getNumeroC();
-			this->m = resultado->getMatriz();
-				
-		}
 		
 		/**
 		* Descrição: Multiplica um escalar pela matriz
