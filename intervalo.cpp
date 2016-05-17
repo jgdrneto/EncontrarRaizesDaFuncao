@@ -1,7 +1,7 @@
 //Classe de intervalo
 class Intervalo{
 	private:
-		long double inicial;		// Inicío do intervalo
+		long double inicial;	// Inicío do intervalo
 		long double final;		// Final do intervalo
 	public:	
 		

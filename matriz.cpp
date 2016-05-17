@@ -8,7 +8,7 @@ using namespace std;
 class Matriz{
 	private:
 		//Atributos da classe
-		double** m;	//Ponteiro de pinteiro no qual será alocado o espaço para matriz
+		double** m;	//Ponteiro de ponteiro no qual será alocado o espaço para matriz
 		int l;		//Número de linhas da matriz;
 		int c; 		//Número de colunas da matriz;
 	public:
@@ -23,7 +23,7 @@ class Matriz{
 		l(0),
 		c(0){
 
-			//Atribui o numero de linhase colunas no atributo correspondente da classe
+			//Atribui o numero de linhas e colunas no atributo correspondente da classe
 			this->l= numeroL;
 			this->c = numeroC;
 
@@ -71,7 +71,7 @@ class Matriz{
 		}
 
 		/**
-		* Descrição: Adiciona valores númericos double na matriz
+		* Descrição: Adiciona valores numéricos double na matriz
 		*/
 		void adicionarValores(){
 			if(this->m!=NULL){
@@ -85,7 +85,7 @@ class Matriz{
 						
 						cin >> valor;
 
-						//Adicona o número na linha i coluna j da matriz
+						//Adiciona o número na linha i coluna j da matriz
 						m[i][j] = valor;
 					}
 				}
@@ -145,7 +145,7 @@ class Matriz{
 		/**
 		* Descrição: Sobrecarga do operador de multiplicação
 		* @params: Matriz na qual se deseja fazer a multiplicação
-		* @return: Endereço da matriz resultante da operação de multplicação
+		* @return: Endereço da matriz resultante da operação de multiplicação
 		*/
 		Matriz& operator*(Matriz& matriz2){
 

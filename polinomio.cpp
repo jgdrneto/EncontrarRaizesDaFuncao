@@ -10,7 +10,7 @@ class Polinomio{
 	private:
 		//Atributos da classe
 		long double* p;	//Ponteiro de ponteiro que será alocado o espaço do polinômio
-		int grau;	//Grau do polinômio;
+		int grau;	    //Grau do polinômio;
 
 	public:
 
@@ -40,7 +40,7 @@ class Polinomio{
 
 		/**
 		* Descrição: Retorna o ponteiro do polinômio
-		* @return : Ponteiro do atributo m da classe
+		* @return :  Ponteiro do atributo m da classe
 		*/
 		long double*& getPolinomio(){
 			return this->p;
@@ -48,7 +48,7 @@ class Polinomio{
 
 		/**
 		* Descrição: Retorna o grau do polinômio
-		* @return : Inteiro com o valor do número de linhas da matriz
+		* @return :  Inteiro com o valor do número de linhas da matriz
 		*/
 		int getGrau(){
 			return this->grau;
@@ -105,7 +105,7 @@ class Polinomio{
 					
 				cin >> valor;
 
-				//Adicona o número no termo i do vetor p
+				//Adiciona o número no termo i do vetor p
 				this->p[i] = valor;
 			}
 		}
@@ -116,7 +116,7 @@ class Polinomio{
 		void imprimir(){
 			//imprime o polinômio
 			for(int i = grau;i >= 0; i--){
-				//Imprime o valor de "+" do polinômio, caso tenha
+				//Imprime o valor de "+" do polinômio, caso exista
 				if(p[i]>=0){
 					cout << "+";
 				}
@@ -205,7 +205,7 @@ class Polinomio{
 		/**
 		* Descrição: Sobrecarga do operador de multiplicação por número
 		* @Params long double : Polinomio que se deseja multiplicar
-		* @return Polinomio& : Novo polinômio resultante da multiplicação
+		* @return Polinomio& :  Novo polinômio resultante da multiplicação
 		*/
 		Polinomio& operator*(long double numero){
 			//Criando novo polinômio			
@@ -225,7 +225,7 @@ class Polinomio{
 		/**
 		* Descrição: Sobrecarga do operador de divisão por número
 		* @Params long double : Polinomio que se deseja multiplicar
-		* @return Polinomio& : Novo polinômio resultante da multiplicação
+		* @return Polinomio& :  Novo polinômio resultante da multiplicação
 		*/
 		Polinomio& operator/(long double numero){
 			if(numero!=0){
