@@ -1,6 +1,7 @@
 #include "polinomio.cpp"
 #include "intervalo.cpp"
 #include "matriz.cpp"
+#include "matrizPolinomioComposto.cpp"
 
 //Constante usado no passo do método de troca de sinais
 #define PASSO 0.5
@@ -16,7 +17,17 @@ class Algoritmo{
 	private:
 
 		Algoritmo(){/*NULO*/}
-
+		
+		bool satisfaz(MatrizPolinomioComposto& F, matriz& xap){
+			for(int i=0;i<F.getQtdPc();i++){
+				if(abs(F.getPolinomioComposto()[i].getResultado(xap))>ERRO){
+					return false;
+				}
+			}
+			
+			return true;
+		}
+			
 		/**
 		* Descrição: Método para calcular o valor do coeficiente de Lagrange
 		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
@@ -219,7 +230,7 @@ class Algoritmo{
 				}
 
 			}else{
-				cerr << "Não é possível aplicar o método para Lagrande " << endl;
+				cerr << "Não é possível aplicar o método para Lagrange " << endl;
 			}
 			
 			if(!polinomio.todosCoeficientesPositivos()){
@@ -409,88 +420,52 @@ class Algoritmo{
 			//Aproximação menor que o ERRO
 			return xap;
 		}
-
-		/**
-		* Descrição: Matriz F
-		* @params Matriz : Matriz ???
-		* @return Matriz : ???
-		*/
-		static Matriz& F(Matriz xap){
-			Matriz *resultado = new Matriz(2, 1);
-
-			double p1 = (xap.getValor(0, 0) * xap.getValor(0, 0)) + (xap.getValor(1, 0) * xap.getValor(1, 0)) - 1.0;
-			double p2 = xap.getValor(0, 0) + xap.getValor(1, 0) - 1.0;
-
-			cout << "Aqui " << p2 << endl;
-
-			resultado->adicionarValores(p1, 0, 0);
-			resultado->adicionarValores(p2, 1, 0);
-
-			return *resultado;
-		}
-
+		
 		/**
 		* Descrição: Método quase-Newton
 		* @params Polinomio& : Polinômio que se deseja executar o algoritmo
 		* @params Intervalo& : Intervalo em que se deseja procurar o zero da função
 		* @return double : zero da função.
 		*/		
-		static Matriz& metodoQuaseNewton(){
+		static Matriz& metodoQuaseNewton(MatrizPolinomioComposto& F, matriz& xInicial){
 			
-			Matriz *xap = new Matriz(2, 1);
-			Matriz *xnovo = new Matriz(2, 1);
+			Matriz bap(F.getQtdPc(),F.getQtdPc());
 
-			Matriz *bap = new Matriz(2, 2);
-			Matriz *bap_1 = new Matriz(2, 2);
-			Matriz *baux = new Matriz(2, 2);
-
-			Matriz *deltaF = new Matriz(2, 1);
-			Matriz *deltaX = new Matriz(2, 1);
-			Matriz *deltaXT = new Matriz(1, 2);
-
-			Matriz *u = new Matriz(2, 1);
-			Matriz *resultado = new Matriz(2, 1);
-			Matriz *resultado2 = new Matriz(2, 1);
-
-			double v1, v2;
-
-			for(int i = 0; i < 2; i++){
-				xap->adicionarValores(0.0, i, 0);
-			}
-
-			bap = &bap->identidade();
-			bap_1 = bap;
-
+			Matriz deltaF(1,1);
+			Matriz deltaX(1,1);
+			Matriz u(1, 1);
+			Matriz xnovo(1,1);
+			Matriz baux(1,1);
+			Matriz bap_1(1,1);
+			Matriz baux_1(1,1);
+			
+			Matriz xap = xInicial;		// x^(ap) <- x^(inicial) 
+			bap = bap->identidade();  	// B_(ap) <- I
+			bap_1 = bap.identidade();   // B_(ap)^(-1) = I
+			baux_1 = bap.identidade()   // B_aux^(-1) = I
+			
 			do{
-				*resultado = F(*xap);
-				*xnovo = *xap - (*bap_1 * *resultado);
-				free(resultado);
-
-				*resultado = F(*xnovo);
-				*resultado2 = F(*xap);
-				*deltaF = *resultado - *resultado2;
-				free(resultado);
-				free(resultado2);
-
-				*deltaX = (*xnovo - *xap);
 				
-				*deltaXT = deltaX->getTranspostaVetor();
+				xnovo = xap - bap_1 * F.getResultado(xap); // x^Novo = x^ap - Bap^(-1)*F(x^(ap))
+				
+				deltaF = F.getResultado(xnovo) - F.getResultado(xap) // /\F = F(x^(novo)) - F(x^(ap)) 
+				
+				deltaX = xnovo - xap; // /\X = x^(novo) - x^(ap)
+				
+				u = (deltaF-(bap*deltaF))/(deltaX.transposta()* deltaX) //u = (/\F  - B_(ap) * /\X)/ /\X^T * /\X
+				
+				baux = bap; // B_(aux) = B_(ap)
+				
+				bap = bap + (u * deltaX.transposta()); //B_(ap) = B(ap) + u * /\X^T  
+				
+				//É B_AUX^(-1), DEPOIS IMPLEMENTO A INVERSA
+				bap_1 = baux - (baux_1 * u * deltaX.transposta() *baux_1)/((deltaX.transposta() * baux_1 * u)+1)   
+				
+				xap = xnovo; //x(ap) = x^(novo)
 
-				*u = (*deltaF - (*bap * *deltaX)).produtoPorEscalar(1.0/(*deltaXT * *deltaX).getValor(0,0));
-				baux = bap;
-				*bap = *bap + (*u * *deltaXT);
-				*bap_1 = *bap_1 - ((*bap_1 * *u * *deltaXT * *bap_1).produtoPorEscalar(1.0/((*deltaXT * *bap_1) * *u).somaPorEscalar(1.0).getValor(0,0)));
-				xap = xnovo;
+			}while(!satisfaz(F,xap));
 
-				*resultado = F(*xap);
-				v1 = abs(resultado->getValor(0,0));
-				v2 = abs(resultado->getValor(1,0));
-
-				free(resultado);
-
-			}while(v1 > ERRO && v2 > ERRO);//v1 > ERRO || v2 > ERRO);//abs(F(*xap).getValor(0,0)) > ERRO);// || abs(F(*xap).getValor(1,0)) > ERRO);	//Condição de parada F(x)<ERRO
-
-			return *xap;//F(*xap).getValor(0,0);
+			return xap;
 		}
 
 };	

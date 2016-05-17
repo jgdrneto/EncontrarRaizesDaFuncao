@@ -280,36 +280,17 @@ class Matriz{
 		/**
 		* Descrição: Transpõe a matriz
 		*/
-		void transposta(){
-
-			if(this->l == this->c){
-				for(int i=0;i<this->l;i++){
-					for(int j=i;j<this->c;j++){
-						swap(this->m[i][j], this->m[j][i]);
-			 		}	
-				}
-			}else{
-				cout << "ERRO: Matrizes precisam ter o mesmo valor de linha e coluna" << endl;
+		Matriz& transposta(){
+			
+			//Nova mariz com os valores da transposta
+			Matriz* resultado = new Matriz(this->c, this->l); 	
+			
+			for(int i=0;i<resultado->getNumeroL();i++){
+				for(int j=0;j<resultado->getNumeroC();j++){
+					resultado->getMatriz()[i][j] = this->m[j][i];
+			 	}	
 			}
-		}
-
-		/**
-		* Descrição: Retorna o vetor transposto
-		*/
-		Matriz& getTranspostaVetor(){
-			Matriz *resultado;
-			if(this->c == 1){
-				resultado = new Matriz(1, this->l);
-				for(int i = 0; i < this->l; i++){
-					resultado->getMatriz()[0][i] = this->getMatriz()[i][0];
-				}
-			}else{
-				resultado = new Matriz(this->c, 1);
-				for(int i = 0; i < this->c; i++){
-					resultado->getMatriz()[i][0] = this->getMatriz()[0][i];
-				}
-			}
-
+				
 			return *resultado;
 		}
 
@@ -389,13 +370,38 @@ class Matriz{
 
 			return valor;	
 		}
+	
+		/**
+		* Descrição: Sobrecarga do operador de atribuição
+		* @Params Polinomio& : Matriz que se deseja copiar
+		* @return Polinomio& : Nova matriz resultante da cópia
+		*/
+		void operator=(Matriz& matriz){
 
+			//Criando nova matriz de msm tamanho da passada por parâmetro
+			Matriz* resultado = new Matriz(matriz.getNumeroL(), matriz.getNumeroC());
+
+			//Passando valores para a nova matriz
+			for(int i = 0; i < matriz.getNumeroL(); i++){
+				for(int j = 0; j < matriz.getNumeroC(); j++){
+					resultado->getMatriz()[i][j] = matriz.getMatriz()[i][j];
+				}
+			}
+		
+			//Atualizando os valores de this
+			this->l = resultado->getNumeroL();
+			this->c = resultado->getNumeroC();
+			this->m = resultado->getMatriz();
+				
+		}
+		
 		/**
 		* Descrição: Multiplica um escalar pela matriz
 		* @return: Matriz& : matriz multiplicada
 		*/
-		Matriz& produtoPorEscalar(double escalar){
+		Matriz& operator*(double escalar){
 			Matriz *resultado = new Matriz(this->l, this->c);
+			
 			for(int i = 0; i < this->l; i++){
 				for(int j = 0; j < this->c; j++){
 					resultado->getMatriz()[i][j] = this->getMatriz()[i][j] * escalar;
@@ -409,15 +415,34 @@ class Matriz{
 		* Descrição: Soma um escalar à matriz
 		* @return: Matriz& : matriz somada
 		*/
-		Matriz& somaPorEscalar(double escalar){
+		Matriz& operator+(double escalar){
+			
 			Matriz *resultado = new Matriz(this->l, this->c);
+			
 			for(int i = 0; i < this->l; i++){
 				for(int j = 0; j < this->c; j++){
 					resultado->getMatriz()[i][j] = this->getMatriz()[i][j] + escalar;
 				}
 			}
 
+			return (*resultado);
+		}
+		
+		/**
+		* Descrição: Divisão por matriz unária
+		* @return: Matriz& : nova matriz com o resultado da operação de divisão 
+		*/
+		Matriz& operator/(Matriz& matriz){
+			//Nova matriz que guardará o resultado
+			Matriz *resultado = new Matriz(this->l, this->c);
+			
+			for(int i = 0; i < this->l; i++){
+				for(int j = 0; j < this->c; j++){
+					resultado->getMatriz()[i][j] = this->getMatriz()[i][j]/matriz.getMatriz()[0][0];
+				}
+			}
+
 			return *resultado;
 		}
-
+		
 };
