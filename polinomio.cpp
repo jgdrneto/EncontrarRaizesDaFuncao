@@ -42,7 +42,7 @@ class Polinomio{
 			this->p = new long double[g+1];
 
 			//Iniciando com 0 em todo o polinômio
-			for(int i;i<=g;i++){
+			for(int i = 0;i<=g;i++){
 				this->p[i]=0;
 			}
 		}
@@ -77,8 +77,9 @@ class Polinomio{
 		*/
 		long double getResultado(long double x){
 			long double soma=0;
+
 			//Somatório da aplicação do x em cada termo do polinômio
-			for(int i=0;i<=this->grau;i++){
+			for(int i = 0; i <= this->grau; i++){
 				soma+= this->p[i] * (long double)pow(x,i); 
 			}
 

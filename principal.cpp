@@ -170,8 +170,60 @@ void preencherValores(Polinomio& polinomio){
 	polinomio.getPolinomio()[1] = 0;
 	polinomio.getPolinomio()[2] = 1;
 	//polinomio.getPolinomio()[3] = 1;
-	//polinomio.getPolinomio()[4] = 1;    
-	
+	//polinomio.getPolinomio()[4] = 1;	
+}
+
+void preencherValores(MatrizPolinomioComposto& F1, MatrizPolinomioComposto& F2){
+	// ay^2 + by + c
+	F1.getMatrizPolinomioComposto()[0].getPolinomioComposto()[0].getPolinomio()[0] = -1; // c = -1
+	F1.getMatrizPolinomioComposto()[0].getPolinomioComposto()[0].getPolinomio()[1] = 0; // b = 0
+	F1.getMatrizPolinomioComposto()[0].getPolinomioComposto()[0].getPolinomio()[2] = 1; // a = 1
+	// y^2 - 1
+
+	// ax^2 + by + c
+	F1.getMatrizPolinomioComposto()[0].getPolinomioComposto()[1].getPolinomio()[0] = 0; // c = 0
+	F1.getMatrizPolinomioComposto()[0].getPolinomioComposto()[1].getPolinomio()[1] = 0; // b = 0
+	F1.getMatrizPolinomioComposto()[0].getPolinomioComposto()[1].getPolinomio()[2] = 1; // a = 1
+	// x^2
+
+	// ay + c
+	F1.getMatrizPolinomioComposto()[1].getPolinomioComposto()[0].getPolinomio()[0] = -1; // c = -1
+	F1.getMatrizPolinomioComposto()[1].getPolinomioComposto()[0].getPolinomio()[1] = 1; // a = 1
+	// y - 1
+
+	// ax + c
+	F1.getMatrizPolinomioComposto()[1].getPolinomioComposto()[1].getPolinomio()[0] = 0; // c = 0
+	F1.getMatrizPolinomioComposto()[1].getPolinomioComposto()[1].getPolinomio()[1] = 1; // a = 1
+	// x
+
+
+
+	// ay^2 + by + c
+	F2.getMatrizPolinomioComposto()[0].getPolinomioComposto()[0].getPolinomio()[0] = -2; // c = -2
+	F2.getMatrizPolinomioComposto()[0].getPolinomioComposto()[0].getPolinomio()[1] = 0; // b = 0
+	F2.getMatrizPolinomioComposto()[0].getPolinomioComposto()[0].getPolinomio()[2] = 1; // a = 1
+	// y^2 + y - 1
+
+	// ax^2 + by + c
+	F2.getMatrizPolinomioComposto()[0].getPolinomioComposto()[1].getPolinomio()[0] = -2; // c = -2
+	F2.getMatrizPolinomioComposto()[0].getPolinomioComposto()[1].getPolinomio()[1] = 0; // b = 0
+	F2.getMatrizPolinomioComposto()[0].getPolinomioComposto()[1].getPolinomio()[2] = 1; // a = 1
+	// x^2 + x
+
+	// ay + c
+	F2.getMatrizPolinomioComposto()[1].getPolinomioComposto()[0].getPolinomio()[0] = -1; // c = -1
+	F2.getMatrizPolinomioComposto()[1].getPolinomioComposto()[0].getPolinomio()[1] = 1; // a = 1
+	// y - 1
+
+	// ax + c
+	F2.getMatrizPolinomioComposto()[1].getPolinomioComposto()[1].getPolinomio()[0] = -1; // c = -1
+	F2.getMatrizPolinomioComposto()[1].getPolinomioComposto()[1].getPolinomio()[1] = 1; // a = 1
+	// x
+}
+
+void preencherValores(Matriz& m){
+	m.adicionarValores(2, 0, 0);
+	m.adicionarValores(1, 1, 0);
 }
 
 //Método principal do programa
@@ -225,10 +277,23 @@ int main(int argc, char*argv[]){
 		
 		//Área reservada a testes
 
-		Polinomio polinomio(2);	
+		Polinomio polinomio(2);
+		Matriz graus1(2,1);
+		Matriz graus2(2,1);
+
+		preencherValores(graus1);
+		preencherValores(graus2);
+
+		MatrizPolinomioComposto F1(2, graus1);
+		MatrizPolinomioComposto F2(2, graus2);
 
 		//Adicionando valores estáticos a matriz
 		preencherValores(polinomio);
+		preencherValores(F1, F2);
+
+		Matriz x(2, 1);
+		x.adicionarValores(0, 0, 0);
+		x.adicionarValores(0, 1, 0);
 
 		cout << "Polinômio: " << endl;
 		polinomio.imprimir();
@@ -391,29 +456,48 @@ int main(int argc, char*argv[]){
 		  em polinômios compostos.	
 		  	
 		*/
-		/*  
+
 		cout << "Usando Método quase-Newton: " << endl;
 
-		Matriz *xap = new Matriz(2,1);
-		*xap = Algoritmo::metodoQuaseNewton();
+		cout << "F(x) = |x^2 + y^2 - 1 |" << endl;
+		cout << "       |x + y - 1     |" << endl;
 
-		Matriz *resultado = new Matriz(2,1);
-		*resultado = Algoritmo::F(*xap);
+		Matriz xap(2, 1);
+		xap = Algoritmo::metodoQuaseNewton(F1, x);
 
-		cout << "Valor da aproximação é: [ " << xap->getValor(0,0) << "  " << xap->getValor(1,0) << "]" << endl;
+		cout << "Valor da aproximação é: [ " << xap.getValor(0,0) << " , " << xap.getValor(1,0) << "]" << endl;
 
-		printf("Resultado aplicado no polinomio:[ %.15f  %.15f ]\n", resultado->getValor(0,0), resultado->getValor(1,0));
+		printf("Resultado aplicado no polinomio:[ %.15f  %.15f ]\n", F1.getResultado(xap).getValor(0,0), F1.getResultado(xap).getValor(1,0));
 
-		if(abs(resultado->getValor(0,0)) || abs(resultado->getValor(1,0)) <=ERRO){
+		if(abs(F1.getResultado(xap).getValor(0,0)) || abs(F1.getResultado(xap).getValor(1,0)) <= ERRO){
 			cout << "CORRETO" << endl;
 		}else{
 			cout << "ERRADO" << endl;
 		}
+		
+		cout << "----------------------------------------------------" << endl;
 
-		free(resultado);
-		free(xap);
-		*/
-		cout << "----------------------------------------------------" << endl;		
+
+
+
+		cout << "Usando Método quase-Newton: " << endl;
+
+		cout << "F(x) = |x^2 + y^2 + x + y - 2 |" << endl;
+		cout << "       |x + y - 1     |" << endl;
+
+		xap = Algoritmo::metodoQuaseNewton(F2, x);
+
+		cout << "Valor da aproximação é: [ " << xap.getValor(0,0) << " , " << xap.getValor(1,0) << "]" << endl;
+
+		printf("Resultado aplicado no polinomio:[ %.15f  %.15f ]\n", F1.getResultado(xap).getValor(0,0), F1.getResultado(xap).getValor(1,0));
+
+		if(abs(F1.getResultado(xap).getValor(0,0)) || abs(F1.getResultado(xap).getValor(1,0)) <= ERRO){
+			cout << "CORRETO" << endl;
+		}else{
+			cout << "ERRADO" << endl;
+		}
+		
+		cout << "----------------------------------------------------" << endl;
 	}
 
 	return 0;

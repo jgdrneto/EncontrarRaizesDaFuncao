@@ -26,13 +26,18 @@ class PolinomioComposto
         /**
 		* Descrição: Construtor do programa
 		* @params int : Quantidade de variáveis
+		* @params int : Grau do polinomio
 		*/
-		PolinomioComposto(int v):
+		PolinomioComposto(int v, int g):
 		pc(NULL),
 		qtdVariaveis(v){
 
 			//Alocando espaço para o polinômio composto
 			this->pc = new Polinomio[v];
+
+			for(int i = 0;i<=g;i++){
+				this->pc[i]= *(new Polinomio(g));
+			}
 		}
 
 		/**
@@ -67,8 +72,8 @@ class PolinomioComposto
 			double soma = 0;
 			
 			//Somatório da aplicação do x em cada termo do polinômio
-			for(int i=0;i<=this->qtdVariaveis;i++){
-				soma += this->pc[i].getResultado(v.getMatriz()[i][0]) ; 
+			for(int i = 0; i < this->qtdVariaveis; i++){
+				soma += this->pc[i].getResultado(v.getMatriz()[i][0]);
 			}
 
 			return soma;

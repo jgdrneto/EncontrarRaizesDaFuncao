@@ -17,13 +17,7 @@ class Algoritmo{
 		Algoritmo(){/*NULO*/}
 		
 		static bool satisfaz(MatrizPolinomioComposto& F, Matriz& xap){
-			for(int i=0;i<F.getQtdPc();i++){
-				if(abs(F.getPolinomioComposto()[i].getResultado(xap))>ERRO){
-					return false;
-				}
-			}
-			
-			return true;
+			return F.getResultado(xap).norma()<ERRO;
 		}
 			
 		/**
@@ -433,16 +427,16 @@ class Algoritmo{
 			Matriz deltaX(1,1);
 			Matriz u(1, 1);
 			Matriz xnovo(1,1);
-			Matriz baux(1,1);
+//			Matriz baux(1,1);
 			Matriz bap_1(1,1);
-			Matriz baux_1(1,1);
+//			Matriz baux_1(1,1);
 			
 			Matriz* xap =  new Matriz(1,1);  //Compilador reclamou
 
 			(*xap) = xInicial;			// x^(ap) <- x^(inicial) 	
 			bap = bap.identidade();  	// B_(ap) <- I
 			bap_1 = bap.identidade();   // B_(ap)^(-1) = I
-			baux_1 = bap.identidade();   // B_aux^(-1) = I
+//			baux_1 = bap.identidade();   // B_aux^(-1) = I
 			
 			do{
 				
@@ -454,12 +448,12 @@ class Algoritmo{
 				
 				u = (deltaF-(bap*deltaF))/(deltaX.transposta()* deltaX); //u = (/\F  - B_(ap) * /\X)/ /\X^T * /\X
 				
-				baux = bap; // B_(aux) = B_(ap)
-				
+				//baux = bap; // B_(aux) = B_(ap)
+
 				bap = bap + (u * deltaX.transposta()); //B_(ap) = B(ap) + u * /\X^T  
 				
 				//É B_AUX^(-1), DEPOIS IMPLEMENTO A INVERSA
-				bap_1 = baux - (baux_1 * u * deltaX.transposta() *baux_1)/((deltaX.transposta() * baux_1 * u)+1);   
+				bap_1 = bap_1 - (bap_1 * u * deltaX.transposta() *bap_1)/((deltaX.transposta() * bap_1 * u)+1); 
 				
 				*(xap) = xnovo; //x(ap) = x^(novo)
 

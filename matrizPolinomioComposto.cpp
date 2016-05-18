@@ -14,12 +14,18 @@ class MatrizPolinomioComposto
 		* Descrição: Construtor do programa
 		* @params int : Quantidade de variáveis
 		*/
-		MatrizPolinomioComposto(int qtdPolinomioComposto):
+		MatrizPolinomioComposto(int qtdPolinomioComposto, Matriz& graus):
 		mpc(NULL),
 		qtdPc(qtdPolinomioComposto){
 
 			//Alocando espaço para o polinômio composto
 			this->mpc = new PolinomioComposto[qtdPolinomioComposto];
+			//PolinomioComposto *p;
+		
+			for(int i=0;i<qtdPolinomioComposto; i++){
+				//p = new PolinomioComposto(qtdPolinomioComposto, graus.getMatriz()[i][0]);
+				this->mpc[i] = *(new PolinomioComposto(qtdPolinomioComposto, graus.getMatriz()[i][0]));
+			}
 		}
 
 		/**
@@ -33,7 +39,7 @@ class MatrizPolinomioComposto
 		* Descrição: Retorna o ponteiro da matriz de polinômio composto
 		* @return :  Ponteiro do atributo mpc da classe
 		*/
-		PolinomioComposto*& getPolinomioComposto(){
+		PolinomioComposto*& getMatrizPolinomioComposto(){
 			return this->mpc;
 		}
 
@@ -51,11 +57,12 @@ class MatrizPolinomioComposto
 		* @return Matriz& : Soma total de cada polinômio pertecente ao polinomio composto
 		*/
 		Matriz& getResultado(Matriz& v){
+
 			Matriz* soma = new Matriz(qtdPc,1);
-			
+
 			//Somatório da aplicação do x em cada termo do polinômio
-			for(int i=0;i<=this->qtdPc;i++){
-				soma->getMatriz()[i][0] += this->mpc[i].getResultado(v) ; 
+			for(int i = 0; i < this->qtdPc; i++){
+				soma->getMatriz()[i][0] += this->mpc[i].getResultado(v);
 			}
 
 			return *soma;
