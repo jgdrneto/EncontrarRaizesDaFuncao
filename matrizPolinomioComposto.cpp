@@ -31,7 +31,7 @@ class MatrizPolinomioComposto
 		/**
 		* Descrição: Destrutor da classe
 		*/
-		~MatrizPolinomioComposto(){
+		virtual ~MatrizPolinomioComposto(){
 			delete[] this->mpc;
 		}   
 		
@@ -68,4 +68,16 @@ class MatrizPolinomioComposto
 			return *soma;
 		}
 		
+		/**
+		* Descrição: Imprime a matriz com os polinômio composto.
+		*/	
+		void imprimir(){
+			//imprime os polinômios compostos
+			for(int i = 0;i < this->qtdPc; i++){
+				cout << "Valores dos coeficientes da " << i+1 << "ª equação: " << endl;
+				this->mpc[i].imprimir(); 	
+			}
+			cout << "" << endl;
+		}
+
 };

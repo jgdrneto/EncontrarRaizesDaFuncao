@@ -63,7 +63,7 @@ class Matriz{
 		/**
 		* Descrição: Destrutor da classe
 		*/
-		~Matriz(){
+		virtual ~Matriz(){
 			//Desalocando a memória
 			for(int i =0;i<this->l;i++){
 				delete[] this->m[i];

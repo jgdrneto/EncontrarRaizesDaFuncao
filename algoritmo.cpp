@@ -29,16 +29,7 @@ class Algoritmo{
 			// Formula para calcular o coeficiente, 
 			// Pense em: (1 + pow(b,1/e))
 			// b : Valor de dentro da raiz
-			// e : indice da raiz
-			
-			/*
-			cout << "polinomio: " << endl;
-			polinomio.imprimir();
-			cout << "Maior valor absoluto dos negativos: " << polinomio.maiorValorAbsoluto() << endl;
-			cout << "Coeficiente do termo de maior indice: " << polinomio.getPolinomio()[polinomio.getGrau()] << endl;
-			cout << "Grau do polinomio: " << polinomio.getGrau() << endl;
-			cout << "Maior indice dos coeficientes negativos: " << polinomio.maiorIndiceNegativo() << endl;
-			*/
+			// e : indice da raiz	
 			
 			return 1+pow((polinomio.maiorValorAbsoluto()/polinomio.getPolinomio()[polinomio.getGrau()]),(1 / (polinomio.getGrau()-polinomio.maiorIndiceNegativo())));
 		}
@@ -276,36 +267,28 @@ class Algoritmo{
 		* @return double : zero da função.
 		*/		
 		static long double metodoDasCordas(Polinomio& polinomio,Intervalo& intervalo){
-			long double inferior = intervalo.getInicial();
-			long double superior = intervalo.getFinal();
+			long double baixo = intervalo.getInicial();
+			long double alto = intervalo.getFinal();
+			
 			//Valores que guadarão os valores atuais e o valores anteriores 
-			long double x,c, xAnt;
-
-			//Calculando segunda derivada
-			Polinomio segundaDerivada = polinomio.getDerivada().getDerivada();
-
-			//Vendo por onde se partir para construçãõ das cordas
-			if(segundaDerivada.getResultado(superior) * polinomio.getResultado(superior) > 0){
-				x = superior;
-				c = inferior;
-			}else{
-				x = inferior;
-				c = superior;
-			}
+			long double cn;
 
 			do{
-				//Salvando o x anterior
-				xAnt = x;
-				//Formula	
-				x = xAnt - (polinomio.getResultado(x)/(polinomio.getResultado(x)-polinomio.getResultado(c)))*(x-c);
-				/*
-				cout << "Valor de x:" << x <<  endl;
-				cout << "Valor de x anterior:" << xAnt << endl;
-				cout << "-----------------------------------------------------" << endl;
-				*/
-			}while(abs(polinomio.getResultado(x))>ERRO);
+				
+				cn = baixo - ((alto-baixo)/(polinomio.getResultado(alto)-polinomio.getResultado(baixo)))*polinomio.getResultado(baixo); 
 
-			return x;
+				if(polinomio.getResultado(cn) * polinomio.getResultado(baixo)>0){
+					baixo = cn;
+				}else{
+					if(polinomio.getResultado(cn)==0){
+						return cn;
+					}else{
+						alto = cn;
+					}
+				}
+			}while(abs(polinomio.getResultado(cn))>ERRO);
+
+			return cn;
 
 		}
 
@@ -317,7 +300,7 @@ class Algoritmo{
 		*/		
 		static long double metodoDoPontoFixo(Polinomio& polinomio,Intervalo& intervalo){
 
-			long double resultado=0, resultadoAnt=intervalo.getInicial();
+			long double resultado=0, resultadoAnt=(intervalo.getInicial()+intervalo.getFinal())/2;
 
 			//Criando polinomio (P(x) = x)
 			Polinomio* g = new Polinomio(1);
@@ -423,21 +406,17 @@ class Algoritmo{
 			
 			Matriz bap(F.getQtdPc(),F.getQtdPc());
 
-			Matriz deltaF(1,1);
-			Matriz deltaX(1,1);
-			Matriz u(1, 1);
-			Matriz xnovo(1,1);
-//			Matriz baux(1,1);
-			Matriz bap_1(1,1);
-//			Matriz baux_1(1,1);
+			Matriz deltaF(0,0);
+			Matriz deltaX(0,0);
+			Matriz u(0, 0);
+			Matriz xnovo(0,0);
+			Matriz bap_1(0,0);
 			
-			Matriz* xap =  new Matriz(1,1);  //Compilador reclamou
+			Matriz* xap =  new Matriz(0,0);  //Compilador reclamou
 
 			(*xap) = xInicial;			// x^(ap) <- x^(inicial) 	
 			bap = bap.identidade();  	// B_(ap) <- I
 			bap_1 = bap.identidade();   // B_(ap)^(-1) = I
-//			baux_1 = bap.identidade();   // B_aux^(-1) = I
-			
 			do{
 				
 				xnovo = (*xap) - bap_1 * F.getResultado(*(xap)); // x^Novo = x^ap - Bap^(-1)*F(x^(ap))
@@ -446,13 +425,10 @@ class Algoritmo{
 				
 				deltaX = xnovo - (*xap); // /\X = x^(novo) - x^(ap)
 				
-				u = (deltaF-(bap*deltaF))/(deltaX.transposta()* deltaX); //u = (/\F  - B_(ap) * /\X)/ /\X^T * /\X
-				
-				//baux = bap; // B_(aux) = B_(ap)
-
+				u = (deltaF-(bap*deltaX))/(deltaX.transposta()* deltaX); //u = (/\F  - B_(ap) * /\X)/ /\X^T * /\X
+			
 				bap = bap + (u * deltaX.transposta()); //B_(ap) = B(ap) + u * /\X^T  
 				
-				//É B_AUX^(-1), DEPOIS IMPLEMENTO A INVERSA
 				bap_1 = bap_1 - (bap_1 * u * deltaX.transposta() *bap_1)/((deltaX.transposta() * bap_1 * u)+1); 
 				
 				*(xap) = xnovo; //x(ap) = x^(novo)

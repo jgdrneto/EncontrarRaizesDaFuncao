@@ -50,7 +50,7 @@ class Polinomio{
 		/**
 		* Descrição: Destrutor da classe
 		*/
-		~Polinomio(){
+		virtual ~Polinomio(){
 			delete[] this->p;
 		}
 

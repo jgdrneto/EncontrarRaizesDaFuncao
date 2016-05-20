@@ -164,13 +164,49 @@ bool teste(int argc,char* argv[]){
 	return false;
 }	
 
-void preencherValores(Polinomio& polinomio){
-	//Adicionando valores estáticos a matriz
-	polinomio.getPolinomio()[0] = -2; 
-	polinomio.getPolinomio()[1] = 0;
-	polinomio.getPolinomio()[2] = 1;
-	//polinomio.getPolinomio()[3] = 1;
-	//polinomio.getPolinomio()[4] = 1;	
+void preencherValores(Polinomio* polinomios){
+	//Adicionando valores estáticos ao polinômios
+
+	//-----------------------------------------------------------
+
+	//Polinomio 1 | x² -2 |
+	
+	//Criando polinômios
+	polinomios[0] = *(new Polinomio(2));
+
+	//Adicionando valores
+	polinomios[0].getPolinomio()[0] = -2; 
+	polinomios[0].getPolinomio()[1] = 0;
+	polinomios[0].getPolinomio()[2] = 1;
+	
+	//-----------------------------------------------------------
+
+	//Polinomio 2 | x³ - x² - 1 |
+	
+	//Criando polinômios
+	polinomios[1] = *(new Polinomio(3));
+
+	//Adicionando valores
+	polinomios[1].getPolinomio()[0] = -1; 
+	polinomios[1].getPolinomio()[1] = 0;
+	polinomios[1].getPolinomio()[2] = -1;
+	polinomios[1].getPolinomio()[3] = 1;
+
+	//-----------------------------------------------------------
+	//Polinomio 3 | x⁴ - 2x³ + x² -3x - 1 |
+
+	//Criando polinômios
+	polinomios[2] = *(new Polinomio(4));
+
+	//Adicionando valores
+	polinomios[2].getPolinomio()[0] = -1; 
+	polinomios[2].getPolinomio()[1] = -3;
+	polinomios[2].getPolinomio()[2] = 1;
+	polinomios[2].getPolinomio()[3] = -2;
+	polinomios[2].getPolinomio()[4] = 1;
+
+	//-----------------------------------------------------------
+
 }
 
 void preencherValores(MatrizPolinomioComposto& F1, MatrizPolinomioComposto& F2){
@@ -288,197 +324,191 @@ int main(int argc, char*argv[]){
 		MatrizPolinomioComposto F2(2, graus2);
 
 		//Adicionando valores estáticos a matriz
-		preencherValores(polinomio);
 		preencherValores(F1, F2);
 
 		Matriz x(2, 1);
 		x.adicionarValores(0, 0, 0);
 		x.adicionarValores(0, 1, 0);
 
-		cout << "Polinômio: " << endl;
-		polinomio.imprimir();
-
 		Intervalo intervalo;
 
-		//Verificando soluções por TROCA DE SINAL
+		Polinomio polinomios[3];
 
-		cout << "Usando Método de refinamento por troca de sinal: " << endl;
-		
-		intervalo = Algoritmo::metodoTrocaDeSinal(polinomio, 0);
+		preencherValores(polinomios);
 
-		cout << "Intervalo: " << intervalo.getInicial() << " e " << intervalo.getFinal() << endl;
+		for(int i=0;i<3;i++){
 
-		cout << "----------------------------------------------------" << endl;
+			cout << "=================================\n" << endl;
 
-		//Método da bisserção usando troca de sinal
+			cout << "Polinômio: " << endl;
+			polinomios[i].imprimir();
 
-		cout << "Usando Método de bisserção usando Troca de sinal: " << endl;
+			cout << "\n=================================\n" << endl;
+				
+			//Verificando soluções por TROCA DE SINAL
 
-		cout << "Valor da aproximação é: " << Algoritmo::metodoDaBissercao(polinomio, intervalo) << endl;
-
-		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoDaBissercao(polinomio, intervalo)));
-
-		if(abs(polinomio.getResultado(Algoritmo::metodoDaBissercao(polinomio, intervalo))) <=ERRO){
-			cout << "CORRETO" << endl;
-		}else{
-			cout << "ERRADO" << endl;
-		}
-
-		cout << "----------------------------------------------------" << endl;
-
-		//método das cordas
-
-		cout << "Usando Método das cordas usando troca de sinal: " << endl;
-
-		cout << "Valor da aproximação é: " << Algoritmo::metodoDasCordas(polinomio, intervalo) << endl;
-
-		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoDasCordas(polinomio, intervalo)));
-
-		if(abs(polinomio.getResultado(Algoritmo::metodoDasCordas(polinomio, intervalo))) <=ERRO){
-			cout << "CORRETO" << endl;
-		}else{
-			cout << "ERRADO" << endl;
-		}
-
-		cout << "----------------------------------------------------" << endl;
-
-		cout << "Usando Método do ponto fixo usando troca de sinal: " << endl;
-
-		cout << "Valor da aproximação é: " << Algoritmo::metodoDoPontoFixo(polinomio, intervalo) << endl;
-
-		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoDoPontoFixo(polinomio, intervalo)));
-
-		if(abs(polinomio.getResultado(Algoritmo::metodoDoPontoFixo(polinomio, intervalo))) <=ERRO){
-			cout << "CORRETO" << endl;
-		}else{
-			cout << "ERRADO" << endl;
-		}
-
-		cout << "----------------------------------------------------" << endl;
-
-		cout << "Usando Método de Newton usando troca de sinal: " << endl;
-
-		cout << "Valor da aproximação é: " << Algoritmo::metodoDeNewton(polinomio, intervalo) << endl;
-
-		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoDeNewton(polinomio, intervalo)));
-
-		if(abs(polinomio.getResultado(Algoritmo::metodoDeNewton(polinomio, intervalo))) <=ERRO){
-			cout << "CORRETO" << endl;
-		}else{
-			cout << "ERRADO" << endl;
-		}
-		
-		cout << "----------------------------------------------------" << endl;
-
-		//Verificando soluções por LAGRANGE
-
-		cout << "Usando Método de refinamento por Lagrange: " << endl;
+			cout << "Usando Método de refinamento por troca de sinal: " << endl;
 			
-		intervalo = Algoritmo::metodoDeLagrange(polinomio);
+			intervalo = Algoritmo::metodoTrocaDeSinal(polinomios[i], 0);
 
-		cout << "Intervalo: " << intervalo.getInicial() << " e " << intervalo.getFinal() << endl;
+			cout << "Intervalo: " << intervalo.getInicial() << " e " << intervalo.getFinal() << endl;
 
-		cout << "----------------------------------------------------" << endl;
+			cout << "----------------------------------------------------" << endl;
 
-		//método da bisserção usando Lagrange
+			//Método da bisserção usando troca de sinal
 
-		cout << "Usando Método de bisserção usando Lagrange: " << endl;
+			cout << "Usando Método de bisserção usando Troca de sinal: " << endl;
 
-		cout << "Valor da aproximação é: " << Algoritmo::metodoDaBissercao(polinomio, intervalo) << endl;
+			cout << "Valor da aproximação é: " << Algoritmo::metodoDaBissercao(polinomios[i], intervalo) << endl;
 
-		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoDaBissercao(polinomio, intervalo)));
+			printf("Resultado aplicado no polinomio: %.15Lf \n", polinomios[i].getResultado(Algoritmo::metodoDaBissercao(polinomios[i], intervalo)));
 
-		if(abs(polinomio.getResultado(Algoritmo::metodoDaBissercao(polinomio, intervalo))) <=ERRO){
-			cout << "CORRETO" << endl;
-		}else{
-			cout << "ERRADO" << endl;
-		}
+			if(abs(polinomios[i].getResultado(Algoritmo::metodoDaBissercao(polinomios[i], intervalo))) <=ERRO){
+				cout << "CORRETO" << endl;
+			}else{
+				cout << "ERRADO" << endl;
+			}
 
-		cout << "----------------------------------------------------" << endl;
+			cout << "----------------------------------------------------" << endl;
 
-		//método das cordas
+			//método das cordas
 
-		cout << "Usando Método das cordas usando Lagrange: " << endl;
+			cout << "Usando Método das cordas usando troca de sinal: " << endl;
 
-		cout << "Valor da aproximação é: " << Algoritmo::metodoDasCordas(polinomio, intervalo) << endl;
+			cout << "Valor da aproximação é: " << Algoritmo::metodoDasCordas(polinomios[i], intervalo) << endl;
 
-		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoDasCordas(polinomio, intervalo)));
+			printf("Resultado aplicado no polinomio: %.15Lf \n", polinomios[i].getResultado(Algoritmo::metodoDasCordas(polinomios[i], intervalo)));
 
-		if(abs(polinomio.getResultado(Algoritmo::metodoDasCordas(polinomio, intervalo))) <=ERRO){
-			cout << "CORRETO" << endl;
-		}else{
-			cout << "ERRADO" << endl;
-		}
+			if(abs(polinomios[i].getResultado(Algoritmo::metodoDasCordas(polinomios[i], intervalo))) <=ERRO){
+				cout << "CORRETO" << endl;
+			}else{
+				cout << "ERRADO" << endl;
+			}
 
-		cout << "----------------------------------------------------" << endl;
+			cout << "----------------------------------------------------" << endl;
 
-		cout << "Usando Método do ponto fixo usando Lagrange: " << endl;
+			cout << "Usando Método do ponto fixo usando troca de sinal: " << endl;
 
-		cout << "Valor da aproximação é: " << Algoritmo::metodoDoPontoFixo(polinomio, intervalo) << endl;
+			cout << "Valor da aproximação é: " << Algoritmo::metodoDoPontoFixo(polinomios[i], intervalo) << endl;
 
-		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoDoPontoFixo(polinomio, intervalo)));
+			printf("Resultado aplicado no polinomio: %.15Lf \n", polinomios[i].getResultado(Algoritmo::metodoDoPontoFixo(polinomios[i], intervalo)));
 
-		if(abs(polinomio.getResultado(Algoritmo::metodoDoPontoFixo(polinomio, intervalo))) <=ERRO){
-			cout << "CORRETO" << endl;
-		}else{
-			cout << "ERRADO" << endl;
-		}
+			if(abs(polinomios[i].getResultado(Algoritmo::metodoDoPontoFixo(polinomios[i], intervalo))) <=ERRO){
+				cout << "CORRETO" << endl;
+			}else{
+				cout << "ERRADO" << endl;
+			}
 
-		cout << "----------------------------------------------------" << endl;
+			cout << "----------------------------------------------------" << endl;
 
-		cout << "Usando Método de Newton usando Lagrange: " << endl;
+			cout << "Usando Método de Newton usando troca de sinal: " << endl;
 
-		cout << "Valor da aproximação é: " << Algoritmo::metodoDeNewton(polinomio, intervalo) << endl;
+			cout << "Valor da aproximação é: " << Algoritmo::metodoDeNewton(polinomios[i], intervalo) << endl;
 
-		printf("Resultado aplicado no polinomio: %.15Lf \n", polinomio.getResultado(Algoritmo::metodoDeNewton(polinomio, intervalo)));
+			printf("Resultado aplicado no polinomio: %.15Lf \n", polinomios[i].getResultado(Algoritmo::metodoDeNewton(polinomios[i], intervalo)));
 
-		if(abs(polinomio.getResultado(Algoritmo::metodoDeNewton(polinomio, intervalo))) <=ERRO){
-			cout << "CORRETO" << endl;
-		}else{
-			cout << "ERRADO" << endl;
-		}
+			if(abs(polinomios[i].getResultado(Algoritmo::metodoDeNewton(polinomios[i], intervalo))) <=ERRO){
+				cout << "CORRETO" << endl;
+			}else{
+				cout << "ERRADO" << endl;
+			}
+			
+			cout << "----------------------------------------------------" << endl;
 
-		cout << "----------------------------------------------------" << endl;
+			//Verificando soluções por LAGRANGE
+
+			cout << "Usando Método de refinamento por Lagrange: " << endl;
+				
+			intervalo = Algoritmo::metodoDeLagrange(polinomios[i]);
+
+			cout << "Intervalo: " << intervalo.getInicial() << " e " << intervalo.getFinal() << endl;
+
+			cout << "----------------------------------------------------" << endl;
+
+			//método da bisserção usando Lagrange
+
+			cout << "Usando Método de bisserção usando Lagrange: " << endl;
+
+			cout << "Valor da aproximação é: " << Algoritmo::metodoDaBissercao(polinomios[i], intervalo) << endl;
+
+			printf("Resultado aplicado no polinomio: %.15Lf \n", polinomios[i].getResultado(Algoritmo::metodoDaBissercao(polinomios[i], intervalo)));
+
+			if(abs(polinomios[i].getResultado(Algoritmo::metodoDaBissercao(polinomios[i], intervalo))) <=ERRO){
+				cout << "CORRETO" << endl;
+			}else{
+				cout << "ERRADO" << endl;
+			}
+
+			cout << "----------------------------------------------------" << endl;
+
+			//métpolinomios[i]odo das cordas
+
+			cout << "Usando Método das cordas usando Lagrange: " << endl;
+
+			cout << "Valor da aproximação é: " << Algoritmo::metodoDasCordas(polinomios[i], intervalo) << endl;
+
+			printf("Resultado aplicado no polinomio: %.15Lf \n", polinomios[i].getResultado(Algoritmo::metodoDasCordas(polinomios[i], intervalo)));
+
+			if(abs(polinomios[i].getResultado(Algoritmo::metodoDasCordas(polinomios[i], intervalo))) <=ERRO){
+				cout << "CORRETO" << endl;
+			}else{
+				cout << "ERRADO" << endl;
+			}
+
+			cout << "----------------------------------------------------" << endl;
+
+			cout << "Usando Método do ponto fixo usando Lagrange: " << endl;
+
+			cout << "Valor da aproximação é: " << Algoritmo::metodoDoPontoFixo(polinomios[i], intervalo) << endl;
+
+			printf("Resultado aplicado no polinomio: %.15Lf \n", polinomios[i].getResultado(Algoritmo::metodoDoPontoFixo(polinomios[i], intervalo)));
+
+			if(abs(polinomios[i].getResultado(Algoritmo::metodoDoPontoFixo(polinomios[i], intervalo))) <=ERRO){
+				cout << "CORRETO" << endl;
+			}else{
+				cout << "ERRADO" << endl;
+			}
+
+			cout << "----------------------------------------------------" << endl;
+
+			cout << "Usando Método de Newton usando Lagrange: " << endl;
+
+			cout << "Valor da aproximação é: " << Algoritmo::metodoDeNewton(polinomios[i], intervalo) << endl;
+
+			printf("Resultado aplicado no polinomio: %.15Lf \n", polinomios[i].getResultado(Algoritmo::metodoDeNewton(polinomios[i], intervalo)));
+
+			if(abs(polinomios[i].getResultado(Algoritmo::metodoDeNewton(polinomios[i], intervalo))) <=ERRO){
+				cout << "CORRETO" << endl;
+			}else{
+				cout << "ERRADO" << endl;
+			}
+
+			cout << "----------------------------------------------------" << endl;
 		
+		}
+
 		cout << "Sistemas não-lineares" << endl;
-		
+			
 		cout << "----------------------------------------------------" << endl;
-
-		/*Essa parte é bastante diferente das outras, é preciso criar uma matriz coluna de soluções e
-		  usar uma matriz de polinômios compostos (para ser a F(x)). Uma maneira de fazer isso é usar herança para uma nova classe	
-		  chamanda polinomio composto, e nela estiver uma lista de polinomios simples, um polinomio para cada variável
-		  
-		  Obs: É importante usar uma nova classe para usar como polinomio composto, já que em um mesmo 
-		  polinomio composto poderemos ter P(x,y)= x^2 + y^4 + y^3 + x + 1. O q dificulta muito somente a classe
-		  feita aqui ainda  
-
-		  Pode-se deixar a classe matriz totalmente template, e usá-la no lugar da lista que estará 
-		  em polinômios compostos.	
-		  	
-		*/
 
 		cout << "Usando Método quase-Newton: " << endl;
 
 		cout << "F(x) = |x^2 + y^2 - 1 |" << endl;
 		cout << "       |x + y - 1     |" << endl;
 
-		Matriz xap(2, 1);
-		xap = Algoritmo::metodoQuaseNewton(F1, x);
+		Matriz xap = Algoritmo::metodoQuaseNewton(F1, x);
 
 		cout << "Valor da aproximação é: [ " << xap.getValor(0,0) << " , " << xap.getValor(1,0) << "]" << endl;
 
 		printf("Resultado aplicado no polinomio:[ %.15f  %.15f ]\n", F1.getResultado(xap).getValor(0,0), F1.getResultado(xap).getValor(1,0));
 
-		if(abs(F1.getResultado(xap).getValor(0,0)) || abs(F1.getResultado(xap).getValor(1,0)) <= ERRO){
+		if(F1.getResultado(xap).norma() <= ERRO){
 			cout << "CORRETO" << endl;
 		}else{
 			cout << "ERRADO" << endl;
 		}
-		
+			
 		cout << "----------------------------------------------------" << endl;
-
-
-
 
 		cout << "Usando Método quase-Newton: " << endl;
 
@@ -489,16 +519,14 @@ int main(int argc, char*argv[]){
 
 		cout << "Valor da aproximação é: [ " << xap.getValor(0,0) << " , " << xap.getValor(1,0) << "]" << endl;
 
-		printf("Resultado aplicado no polinomio:[ %.15f  %.15f ]\n", F1.getResultado(xap).getValor(0,0), F1.getResultado(xap).getValor(1,0));
-
-		if(abs(F1.getResultado(xap).getValor(0,0)) || abs(F1.getResultado(xap).getValor(1,0)) <= ERRO){
+		printf("Resultado aplicado no polinomio:[ %.15f  %.15f ]\n", F2.getResultado(xap).getValor(0,0), F2.getResultado(xap).getValor(1,0));
+		if(F2.getResultado(xap).norma() <= ERRO){
 			cout << "CORRETO" << endl;
 		}else{
 			cout << "ERRADO" << endl;
 		}
 		
 		cout << "----------------------------------------------------" << endl;
-	}
-
+	}	
 	return 0;
 }

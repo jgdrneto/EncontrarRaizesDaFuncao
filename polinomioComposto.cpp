@@ -43,7 +43,7 @@ class PolinomioComposto
 		/**
 		* Descrição: Destrutor da classe
 		*/
-		~PolinomioComposto(){
+		virtual ~PolinomioComposto(){
 			delete[] this->pc;
 		}   
 		
@@ -84,7 +84,7 @@ class PolinomioComposto
 		*/	
 		void imprimir(){
 			//imprime os polinômios compostos
-			for(int i = 0;i >= this->qtdVariaveis; i++){
+			for(int i = 0;i < this->qtdVariaveis; i++){
 				cout << "Valores dos coeficientes da " << i+1 << "ª variável: ";
 				this->pc[i].imprimir(); 	
 			}
