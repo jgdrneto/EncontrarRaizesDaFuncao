@@ -132,7 +132,7 @@ class Matriz{
 			//Passando os valores	
 			for(int i = 0;i < matriz2.getNumeroL(); i++){
 				for(int j = 0;j < matriz2.getNumeroC();j++){
-					resultado->getMatriz()[i][i] = matriz2.m[i][i];
+					resultado->getMatriz()[i][j] = matriz2.m[i][j];
 				}
 			}
 
