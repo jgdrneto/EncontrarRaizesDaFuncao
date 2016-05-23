@@ -303,11 +303,38 @@ int main(int argc, char*argv[]){
 
 			//Sistema de equações
 			do{
-				cout << "Digite a quantidade de variáveis do seu sistema" << endl;
+				cout << "Digite a quantidade de variáveis do seu sistema: " << endl;
 				cin >> n;
 			}while(n==-1);
 
+			Matriz graus(n,1);
+			cout << "Digite os graus de cada equação, um por vez:" << endl;
+			graus.adicionarValores();
 
+			MatrizPolinomioComposto Func(n,graus);
+			for(int i = 0; i < Func.getQtdPc(); i++){
+				for(int j = 0; j < n; j++){
+					Func.getMatrizPolinomioComposto()[i].getPolinomioComposto()[j].adicionarValores();
+				}
+			}
+			Func.imprimir();
+
+			Matriz xInicial(n,1);
+			cout << "Digite os valores iniciais das variáveis, na ordem de criação:" << endl;
+			xInicial.adicionarValores();
+
+			Matriz aproximacao(n,1);
+			aproximacao = Algoritmo::metodoQuaseNewton(Func, xInicial);
+
+			cout << "Aproximação: " << endl;
+			for(int i = 0; i < n; i++){
+				printf("| %.15f |\n", aproximacao.getValor(i,0));
+			}
+
+			cout << "Resultado aplicado no polinomio:" << endl;
+			for(int i = 0; i < n; i++){
+				printf("| %.15f |\n", Func.getResultado(aproximacao).getValor(i,0));
+			}
 		}
 	}else{
 		
